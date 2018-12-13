@@ -176,12 +176,12 @@
                   });
 
                   request("requetes/getByNameHeight.rq", "#height", athlete_name, (elem) => { 
-                      height = elem.height.value + ' cm';
+                    height = (Math.round(parseFloat(elem.height.value)*100)/100).toFixed(2)+ ' cm';
                     return height;
                   });
 
                   request("requetes/getByNameWeight.rq", "#weight", athlete_name, (elem) => { 
-                      weight = Math.round(elem.weight.value/1000) + ' kg';
+                    weight = Math.round(elem.weight.value/1000) + ' kg';
                     return weight;
                   });
 
