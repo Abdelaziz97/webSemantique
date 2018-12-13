@@ -5,5 +5,5 @@ WHERE{
 	UNION {?event dbo:silverMedalist ?human . ?human dbo:abstract ?abstract } 
 	UNION {?event dbo:goldMedalist ?human . ?human dbo:abstract ?abstract }
 	FILTER regex(?human, %ATHLETE%)
-        FILTER (lang(?abstract) = 'fr')}
+        FILTER (lang(?abstract) = 'en')}
 	GROUP BY ?human}

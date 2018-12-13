@@ -137,7 +137,7 @@
                   athlete_name = athlete_name.split(' ').join('_');
 
                   request("requetes/getByNameHeight.rq", "#height", athlete_name, (elem) => { 
-                      height = elem.height.value;
+                    height = (Math.round(parseFloat(elem.height.value)*100)/100).toFixed(2);
                     return height;
                   });
 
