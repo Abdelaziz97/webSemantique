@@ -8,6 +8,7 @@
     <title>Olymp'IF</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
     <link rel="stylesheet" href="awesomplete/awesomplete.css" />
     <link rel="stylesheet" href="style.css">
 
@@ -26,10 +27,13 @@
         <div class="text-left d-flex">
           <a href="index.html" class="navbar-brand"><strong>Home</strong></a>
         </div>
+        <div class="col text-center">
+          <h1 style="color:white">OLYMP'<i class="fa fa-trophy"></i>F</h1>
+        </div>
         <div class="text-right">
           <div id="autocomplete" class="autocomplete">
             <span>
-              <button id="bouton_recherche" class="col-1 btn btn-success" type="submit"><i class="fas fa-search"></i></button>
+              <button id="bouton_recherche" class="col-1 btn btn-success" type="submit"><i class="fa fa-search"></i></button>
               <input id="recherche" class="form-control mdb-autocomplete" type="text" placeholder="Athlete name" value="" />
             </div>
           </div>
@@ -40,34 +44,45 @@
     <div class="text-center cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
       <main role="main" class="inner cover">
       <h1 class="cover-heading">Start looking for an Olympic Athlete.</h1>
-      <p class="lead">You can search for a medallist Olympic Athlete here, and we will find informations about them.</p>
+      <p class="lead">You can search for a medalist Olympic Athlete here, and we will find informations about them.</p>
       </main>
     </div>
 
     <div class="col">
       <div class="row text-center">
-          <h1> Some famous athlete : </h1>
-          <div class="col"> 
+          <div class="col-12"> 
+            <h1> Some famous athlete : </h1> 
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
             <div class="card bg-light text-dark">
               <div class="card-body">
-                <a href="https://www.w3schools.com" id="firstAthlete"></a> 
+                <div class="row">
+                  <a href="https://www.w3schools.com" id="firstAthlete"></a> 
+                </div>
               </div>
             </div>
           </div>
           <div class="col">
             <div class="card bg-light text-dark">
               <div class="card-body">
-                <a href="" id="secondAthlete"></a> 
+                <div class="row">
+                  <a href="" id="secondAthlete"></a> 
+                </div>
               </div>
             </div>
           </div>
           <div class="col">
             <div class="card bg-light text-dark">
               <div class="card-body">
-                <a href="" id="thirdAthlete"></a> 
+                <div class="row">
+                  <a href="" id="thirdAthlete"></a> 
+                </div>
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
 
@@ -76,7 +91,7 @@
         var athleteURL = [];
         var athleteList = [];
 
-        readTextFile("requetes/getAllMedalist.rq", function(query) {
+        readTextFile("requetes/getAllMedalist.txt", function(query) {
             var url = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
             $.getJSON(url+"&callback=?", function(resultats) {
               resultats.results.bindings.forEach(function(element) {
@@ -101,7 +116,7 @@
 
           function famousAthlete(){
             let size = athleteList.length;
-            let random = Math.floor(Math.random() * Math.floor(20));
+            let random = Math.floor(Math.random() * Math.floor(50));
             $("#firstAthlete").html(athleteList[random]);
             var URL = 'athlete.html' + '?athleteURL=' + athleteURL[random];
             $("#firstAthlete").attr("href", URL);
@@ -113,8 +128,9 @@
             $("#thirdAthlete").html(athleteList[random]);
             var URL = 'athlete.html' + '?athleteURL=' + athleteURL[random];
             $("#thirdAthlete").attr("href", URL);
+            };
 
-          }
+          
     </script>
 
 

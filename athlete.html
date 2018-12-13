@@ -29,6 +29,9 @@
         <div class="text-left d-flex">
           <a href="index.html" class="navbar-brand"><strong>Home</strong></a>
         </div>
+        <div class="col text-center">
+          <h1 style="color:white">OLYMP'<i class="fa fa-trophy"></i>F</h1>
+        </div>
         <div class="text-right">
           <div id="autocomplete" class="autocomplete">
             <button id="bouton_recherche" class="col-1 btn btn-success" type="submit"><i class="fa fa-search"></i></button>
@@ -153,7 +156,7 @@
         var athleteList = [];
         var i = 1;
 
-        readTextFile("requetes/getAllMedalist.rq", function(query) {
+        readTextFile("requetes/getAllMedalist.txt", function(query) {
             var url = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
             $.getJSON(url+"&callback=?", function(resultats) {
               resultats.results.bindings.forEach(function(element) {
@@ -170,58 +173,58 @@
                   $("#athlete-name").text(athlete_name);
                   athlete_name = athlete_name.split(' ').join('_');
 
-                  request("requetes/getByNameGender.rq", "#gender", athlete_name, (elem) => { 
+                  request("requetes/getByNameGender.txt", "#gender", athlete_name, (elem) => { 
                       gender = elem.gender.value;
                     return gender;
                   });
 
-                  request("requetes/getByNameHeight.rq", "#height", athlete_name, (elem) => { 
+                  request("requetes/getByNameHeight.txt", "#height", athlete_name, (elem) => { 
                     height = (Math.round(parseFloat(elem.height.value)*100)/100).toFixed(2)+ ' cm';
                     return height;
                   });
 
-                  request("requetes/getByNameWeight.rq", "#weight", athlete_name, (elem) => { 
+                  request("requetes/getByNameWeight.txt", "#weight", athlete_name, (elem) => { 
                     weight = Math.round(elem.weight.value/1000) + ' kg';
                     return weight;
                   });
 
-                  request("requetes/getByNameBirthDate.rq", "#birthDate", athlete_name, (elem) => { 
+                  request("requetes/getByNameBirthDate.txt", "#birthDate", athlete_name, (elem) => { 
                     birthDate = elem.date.value;
                     return birthDate;
                   });
 
-                  request("requetes/getByNameBirthPlace.rq", "#birthPlace", athlete_name, (elem) => { 
+                  request("requetes/getByNameBirthPlace.txt", "#birthPlace", athlete_name, (elem) => { 
                     birthPlace = elem.name.value;
                     return birthPlace;
                   });
 
-                  request("requetes/getByNameAbstract.rq", "#abstract", athlete_name, (elem) => { 
+                  request("requetes/getByNameAbstract.txt", "#abstract", athlete_name, (elem) => { 
                     birthPlace = elem.abstract.value;
                     return birthPlace;
                   });
 
 
-                  request("requetes/getByNameSport.rq", "#sport", athlete_name, (elem) => { 
+                  request("requetes/getByNameSport.txt", "#sport", athlete_name, (elem) => { 
                     sport = elem.name.value;
                     return sport;
                   });
 
-                  requestImage("requetes/getByNameImage.rq", "#pic", athlete_name, (elem) => { 
+                  requestImage("requetes/getByNameImage.txt", "#pic", athlete_name, (elem) => { 
                     pic = elem.image.value;
                     return pic;
                   });
 
-                  request("requetes/getByNameCoach.rq", "#coach", athlete_name, (elem) => { 
+                  request("requetes/getByNameCoach.txt", "#coach", athlete_name, (elem) => { 
                     coach = elem.name.value;
                     return coach;
                   });
 
-                  request("requetes/getByNameClub.rq", "#club", athlete_name, (elem) => { 
+                  request("requetes/getByNameClub.txt", "#club", athlete_name, (elem) => { 
                     club = elem.name.value;
                     return club;
                   });
 
-                  request("requetes/getByNameNbMedals.rq", "#medalsNumber", athlete_name, (elem) => { 
+                  request("requetes/getByNameNbMedals.txt", "#medalsNumber", athlete_name, (elem) => { 
                     medalsNumber = elem.count.value;
                     return medalsNumber;
                   });
