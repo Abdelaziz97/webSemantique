@@ -1,9 +1,8 @@
-SELECT ?name 
+SELECT ?name ?human
 WHERE{
-	SELECT ?name (count(*) as ?count) 
+	SELECT ?name ?human (count(*) as ?count) 
 	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human . ?human foaf:name ?name } 
 	UNION {?event dbo:silverMedalist ?human . ?human foaf:name ?name} 
 	UNION {?event dbo:goldMedalist ?human . ?human foaf:name ?name}
-        FILTER (lang(?name) = 'en') }
-GROUP BY ?name}
+        FILTER (lang(?name) = 'en') }}
 ORDER BY DESC(?count)
