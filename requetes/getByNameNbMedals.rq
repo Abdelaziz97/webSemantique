@@ -1,9 +1,9 @@
-SELECT ?human ?count 
+SELECT ?count 
 WHERE{
 	SELECT ?human (count(*) as ?count) 
 	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human .  } 
 	UNION {?event dbo:silverMedalist ?human} 
 	UNION {?event dbo:goldMedalist ?human}
-	FILTER regex(?human, "Michael_Phelps")}
+	FILTER regex(?human, %ATHLETE%)}
 	GROUP BY ?human}
 ORDER BY DESC(?count)

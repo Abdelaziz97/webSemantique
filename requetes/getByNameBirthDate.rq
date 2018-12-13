@@ -1,8 +1,8 @@
-SELECT ?date ?human
+SELECT ?date
 WHERE{
 	SELECT ?human ?date
 	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human dbo:birthDate ?date } 
 	UNION {?event dbo:silverMedalist ?human .?human dbo:birthDate ?date} 
 	UNION {?event dbo:goldMedalist ?human . ?human dbo:birthDate ?date}
-	FILTER regex(?human, "Michael_Phelps")}
+	FILTER regex(?human, %ATHLETE%)}
 	GROUP BY ?human}

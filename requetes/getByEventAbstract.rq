@@ -1,4 +1,4 @@
-SELECT DISTINCT ?namevent ?abstract
+SELECT DISTINCT ?abstract
 WHERE {
         ?event rdf:type dbo:OlympicEvent.
         ?event dbo:abstract ?abstract.
@@ -6,6 +6,6 @@ WHERE {
              ?event rdfs:label ?namevent .
              
 
-FILTER regex(?namevent, "1936 Winter Olympics")
+FILTER regex(?namevent, %EVENT%)
 }
 
