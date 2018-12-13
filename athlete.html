@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Olymp'IF</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="awesomplete/awesomplete.css" />
+    <script src="awesomplete/awesomplete.js" async></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+    <!-- include perso -->
+    <link rel="stylesheet" href="style.css">
+    <script src="js/autocomplete.js"></script>
+    <script src="js/util.js"></script>
+  </head>
+
+
+  <body>
+    <!-- nav bar -->
+    <div class="navbar navbar-dark bg-dark">
+      <div class="container-fluid justify-content-between">
+        <div class="text-left d-flex">
+          <a href="index.html" class="navbar-brand"><strong>Home</strong></a>
+        </div>
+        <div class="text-right">
+          <div id="autocomplete" class="autocomplete">
+            <button id="bouton_recherche" class="col-1 btn btn-success" type="submit"><i class="fas fa-search"></i></button>
+            <input id="recherche" class="form-control mdb-autocomplete" type="text" placeholder="Athlete name" value="" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!--Debut row -->
+    <div class="container-fluid">
+      <div class = "row text-center">
+        <div class="col">
+          <h1 id="athlete-name">USSAIN BOLT</h1>
+        </div>
+      </div>
+
+      <div class = "row">      
+        <div class = "col-9">
+          <div class= "row">
+            <div class="col">
+              <h1> Description </h1>
+              <div class = "text-left" id="abstract">
+                Usain St Leo Bolt, OJ, CD (/ˈjuːseɪn/; born 21 August 1986) is a Jamaican sprinter. Regarded as the fastest human ever timed, he is the first man to hold both the 100 metres and 200 metres world records since fully automatic time became mandatory. He also holds the world record as a part of the 4 × 100 metres relay. He is the reigning World and Olympic champion in these three events. Due to his unprecedented dominance and achievements in the athletic field, he is widely considered the greatest sprinter of all time. A nine-time Olympic gold medallist...
+              </div>
+            </div>
+          </div>
+
+          <div class= "row">
+            <div class="col">
+              <h1> Sport </h1>
+              <div id="sport-desc">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc facilisis lacinia enim sed tempor. Suspendisse orci orci, ullamcorper sed vehicula id, porta et sapien. Vivamus tincidunt quis tellus quis sagittis. Sed a ligula erat. Vivamus mollis ipsum sit amet nulla maximus fringilla. Suspendisse malesuada ligula augue, ut suscipit erat feugiat id. Aliquam hendrerit nisl nec sollicitudin molestie. Quisque consequat purus elit, nec hendrerit erat dictum vel. Sed sed dui et enim molestie egestas eu ut tortor. Praesent eu ullamcorper lacus, eget mattis lectus. Phasellus ut imperdiet augue, id ultricies nisi. In interdum urna quis urna varius consectetur.
+              </div>
+            </div>
+          </div>
+
+          <div class = "row">
+            <div class="col">
+              <h1> Ses médailles </h1>  
+              <div id="medals">
+                <h6> Or : </h6>
+                <ul id="gold">
+                  <li >
+                    2012
+                  </li>
+                </ul>
+                <h6> Argent : </h6>
+                <ul id="silver">
+                  <li >
+                    2012
+                  </li>
+                </ul>
+                <h6> Bronze : </h6>
+                <ul id="bronze">
+                  <li >
+                    2012
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class = "col-3 text-center">
+            <div id="pic-div">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Usain_Bolt_Rio_100m_final_2016i-cr.jpg/280px-Usain_Bolt_Rio_100m_final_2016i-cr.jpg" id="pic" alt="Pic" class="img-thumbnail img-fluid"/>
+          </div>
+          <h4> Informations générale </h4>  
+          <div class="col text-left">
+            <strong> Height : </strong> 
+            <span id="height">  
+              ???
+            </span> <br/>
+            <strong> Weight : </strong>
+            <span id="weight">  
+               ???
+            </span> <br/>
+            <strong> Age : </strong>
+            <span id="age">  
+               ???
+            </span> <br/>
+            <strong> Birth Date : </strong>
+            <span id="birthDate">  
+               ???
+            </span> <br/>
+            <strong> Country : </strong>
+            <span id="nationality">  
+               ???
+            </span> <br/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+        var athleteURL = [];  
+        var athleteList = [];
+        var i = 1;
+
+        readTextFile("requetes/getAllMedalist.rq", function(query) {
+            var url = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
+            $.getJSON(url+"&callback=?", function(resultats) {
+              resultats.results.bindings.forEach(function(element) {
+                athleteURL.push(element.human.value);
+              });
+              autocomplete(document.getElementById('recherche'), document.getElementById("autocomplete"), athleteURL, rechercher);
+
+              var athlete = getUrlParameter('athleteURL');
+              var index = athleteURL.indexOf(athlete);
+
+              if(athlete !== undefined && athlete !== null & index >= 0){
+                  var athlete_name = athleteURL[index];
+                  $("#athlete-name").text(athlete_name);
+
+                  request("requetes/getByNameHeight.rq", "#height", athlete_name, (elem) => { 
+                      height = elem.value;
+                      console.log(height);
+                    return height;
+                  });
+              }
+            });
+          });
+
+
+          $('#bouton_recherche').click(rechercher);
+
+          
+          function rechercher() {
+            var url = window.location.href.split('?')[0];
+            var athlete = $('#recherche').val();
+
+            var newUrl = 'athlete.html' + '?athleteURL=' + athlete;
+            window.location = newUrl;
+          };
+
+
+    </script>
+  </body>
+
+
+</html>
