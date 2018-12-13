@@ -1,0 +1,7 @@
+SELECT ?event ?medal 
+WHERE{
+	SELECT ?event ?human ?medal
+	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human bind("bronze" as ?medal)} 
+	UNION {?event dbo:silverMedalist ?human bind("silver" as ?medal)} 
+	UNION {?event dbo:goldMedalist ?human bind("gold" as ?medal)}
+	FILTER regex(?human, %ATHLETE%)}}

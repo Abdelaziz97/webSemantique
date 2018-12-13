@@ -2,7 +2,7 @@ SELECT DISTINCT ?abstract
 WHERE {
         ?event rdf:type dbo:OlympicEvent.
         ?event dbo:abstract ?abstract.
-        FILTER langMatches(lang(?abstract),'en')
+        FILTER langMatches(lang(?abstract),'fr')
              ?event rdfs:label ?namevent .
              
 
