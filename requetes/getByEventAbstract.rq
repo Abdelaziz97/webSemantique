@@ -1,0 +1,11 @@
+SELECT DISTINCT ?namevent ?abstract
+WHERE {
+        ?event rdf:type dbo:OlympicEvent.
+        ?event dbo:abstract ?abstract.
+        FILTER langMatches(lang(?abstract),'en')
+             ?event rdfs:label ?namevent .
+             
+
+FILTER regex(?namevent, "1936 Winter Olympics")
+}
+
