@@ -15,6 +15,6 @@ WHERE {
              ?gold foaf:name ?namegold.
              FILTER langMatches(lang(?namegold),'en')
 
-FILTER regex(?namevent, "1936 Winter Olympics")
+FILTER regex(?namevent, %EVENT%)
 }
 

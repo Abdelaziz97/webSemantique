@@ -1,9 +1,9 @@
-SELECT ?name ?human
+SELECT ?name
 WHERE{
 	SELECT ?name ?human
 	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human <http://purl.org/linguistics/gold/hypernym> ?weight. ?weight rdfs:label ?name } 
 	UNION {?event dbo:silverMedalist ?human . ?human <http://purl.org/linguistics/gold/hypernym> ?weight . ?weight rdfs:label ?name} 
 	UNION {?event dbo:goldMedalist ?human . ?human <http://purl.org/linguistics/gold/hypernym> ?weight . ?weight rdfs:label ?name}
-        FILTER regex(?human, "Michael_Phelps")
+        FILTER regex(?human, %ATHLETE%)
         FILTER (lang(?name) = 'en')}
 	GROUP BY ?human}

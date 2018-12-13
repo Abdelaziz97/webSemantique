@@ -1,9 +1,9 @@
-SELECT ?gender ?human
+SELECT ?gender
 WHERE{
 	SELECT ?human ?gender
 	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human foaf:gender ?gender } 
 	UNION {?event dbo:silverMedalist ?human . ?human foaf:gender ?gender} 
 	UNION {?event dbo:goldMedalist ?human . ?human foaf:gender ?gender}
-	FILTER regex(?human, "Michael_Phelps")
+	FILTER regex(?human, %ATHLETE%)
   	FILTER (lang(?gender) = 'en')}
 	GROUP BY ?human}

@@ -1,4 +1,4 @@
-SELECT ?weight/1000 ?human
+SELECT ?weight/1000
 WHERE{
 	SELECT ?weight ?human
 	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human dbo:weight ?weight } 
