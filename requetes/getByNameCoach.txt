@@ -1,9 +1,10 @@
 SELECT ?name
 WHERE{
 	SELECT ?human ?name
-	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human dbo:coach ?coach . ?coach foaf:name ?name } 
-	UNION {?event dbo:silverMedalist ?human . ?human dbo:coach ?coach . ?coach foaf:name ?name} 
-	UNION {?event dbo:goldMedalist ?human . ?human dbo:coach ?coach . ?coach foaf:name ?name}
-	FILTER regex(?human, %ATHLETE%)
+	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human . ?human rdfs:label ?label { ?human dbo:coach ?coach } UNION { ?human dbp:coach ?coach } . ?coach rdfs:label ?name } 
+	UNION {?event dbo:silverMedalist ?human . ?human rdfs:label ?label { ?human dbo:coach ?coach } UNION { ?human dbp:coach ?coach } . ?coach rdfs:label ?name} 
+	UNION {?event dbo:goldMedalist ?human . ?human rdfs:label ?label { ?human dbo:coach ?coach } UNION { ?human dbp:coach ?coach } . ?coach rdfs:label ?name}
+	FILTER regex(?label, %ATHLETE%)
+        FILTER (lang(?label) = 'en')
 	FILTER (lang(?name) = 'en')}
-	GROUP BY ?human}
+LIMIT 1}

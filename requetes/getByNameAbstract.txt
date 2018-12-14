@@ -1,9 +1,9 @@
 SELECT ?abstract
 WHERE{
 	SELECT ?abstract
-	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human dbo:abstract ?abstract } 
-	UNION {?event dbo:silverMedalist ?human . ?human dbo:abstract ?abstract } 
-	UNION {?event dbo:goldMedalist ?human . ?human dbo:abstract ?abstract }
-	FILTER regex(?human, %ATHLETE%)
-        FILTER (lang(?abstract) = 'en')}
-	GROUP BY ?human}
+	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human dbo:abstract ?abstract. ?human rdfs:label ?label } 
+	UNION {?event dbo:silverMedalist ?human . ?human dbo:abstract ?abstract. ?human rdfs:label ?label } 
+	UNION {?event dbo:goldMedalist ?human . ?human dbo:abstract ?abstract. ?human rdfs:label ?label }
+	FILTER regex(?label, %ATHLETE%)
+	FILTER (lang(?label)='en')
+        FILTER (lang(?abstract) = 'en')}}

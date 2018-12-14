@@ -1,8 +1,8 @@
 SELECT ?image
 WHERE{
 	SELECT ?image
-	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human dbo:thumbnail ?image } 
-	UNION {?event dbo:silverMedalist ?human . ?human dbo:thumbnail ?image } 
-	UNION {?event dbo:goldMedalist ?human . ?human dbo:thumbnail ?image }
-	FILTER regex(?human, %ATHLETE%)}
-	GROUP BY ?human}
+	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human dbo:thumbnail ?image . ?human rdfs:label ?label} 
+	UNION {?event dbo:silverMedalist ?human . ?human dbo:thumbnail ?image . ?human rdfs:label ?label} 
+	UNION {?event dbo:goldMedalist ?human . ?human dbo:thumbnail ?image . ?human rdfs:label ?label}
+	FILTER regex(?label, %ATHLETE%)
+	FILTER (lang(?label) = 'en')}}

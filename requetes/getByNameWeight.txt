@@ -1,8 +1,8 @@
 SELECT ?weight
 WHERE{
 	SELECT ?weight ?human
-	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human dbo:weight ?weight } 
-	UNION {?event dbo:silverMedalist ?human . ?human dbo:weight ?weight } 
-	UNION {?event dbo:goldMedalist ?human . ?human dbo:weight ?weight }
-	FILTER regex(?human, %ATHLETE%)}
-	GROUP BY ?human}
+	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human dbo:weight ?weight . ?human rdfs:label ?name} 
+	UNION {?event dbo:silverMedalist ?human . ?human dbo:weight ?weight . ?human rdfs:label ?name} 
+	UNION {?event dbo:goldMedalist ?human . ?human dbo:weight ?weight . ?human rdfs:label ?name}
+	FILTER regex(?name, %ATHLETE%)
+	FILTER (lang(?name) = "en")}}

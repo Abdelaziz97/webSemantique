@@ -171,7 +171,6 @@
               if(athlete !== undefined && athlete !== null & index >= 0){
                   var athlete_name = athleteList[index];
                   $("#athlete-name").text(athlete_name);
-                  athlete_name = athlete_name.split(' ').join('_');
 
                   request("requetes/getByNameGender.txt", "#gender", athlete_name, (elem) => { 
                       gender = elem.gender.value;

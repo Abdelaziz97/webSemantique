@@ -1,8 +1,9 @@
 SELECT ?date
 WHERE{
 	SELECT ?human ?date
-	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human dbo:birthDate ?date } 
-	UNION {?event dbo:silverMedalist ?human .?human dbo:birthDate ?date} 
-	UNION {?event dbo:goldMedalist ?human . ?human dbo:birthDate ?date}
-	FILTER regex(?human, %ATHLETE%)}
-	GROUP BY ?human}
+	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human dbo:birthDate ?date . ?human rdfs:label ?label} 
+	UNION {?event dbo:silverMedalist ?human .?human dbo:birthDate ?date . ?human rdfs:label ?label} 
+	UNION {?event dbo:goldMedalist ?human . ?human dbo:birthDate ?date . ?human rdfs:label ?label}
+	FILTER regex(?label, %ATHLETE%)
+	FILTER (lang(?label)='en')}
+LIMIT 1}
