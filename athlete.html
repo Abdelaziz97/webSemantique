@@ -64,21 +64,21 @@
             <div class="col">
               <h1> Medals </h1>  
               <div id="medals">
-                <h6> Gold : </h6>
-                <ul id="gold">
-                  <li >
-                  </li>
-                </ul>
-                <h6> Silver : </h6>
-                <ul id="silver">
-                  <li >
-                  </li>
-                </ul>
-                <h6> Bronze : </h6>
-                <ul id="bronze">
-                  <li >
-                  </li>
-                </ul>
+                <div>
+                  <h6> Gold : </h6>
+                  <ul id="gold">
+                  </ul>
+                </div>
+                <div>
+                  <h6> Silver : </h6>
+                  <ul id="silver">
+                  </ul>
+                </div>
+                <div>
+                  <h6> Bronze : </h6>
+                  <ul id="bronze">
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -226,6 +226,21 @@
                   request("requetes/getByNameNbMedals.txt", "#medalsNumber", athlete_name, (elem) => { 
                     medalsNumber = elem.count.value;
                     return medalsNumber;
+                  });
+
+                  requestArray("requetes/getByNameEventBronze.txt", "#bronze", athlete_name, (elem) => { 
+                    bronze = elem.name.value;
+                    return bronze;
+                  });
+
+                  requestArray("requetes/getByNameEventSilver.txt", "#silver", athlete_name, (elem) => { 
+                    silver = elem.name.value;
+                    return silver;
+                  });
+
+                  requestArray("requetes/getByNameEventGold.txt", "#gold", athlete_name, (elem) => { 
+                    gold = elem.name.value;
+                    return gold;
                   });
 
               }

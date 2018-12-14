@@ -1,8 +1,0 @@
-SELECT ?event ?medal 
-WHERE{
-	SELECT ?event ?human ?medal
-	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human . ?human rdfs:label ?label bind("bronze" as ?medal)} 
-	UNION {?event dbo:silverMedalist ?human . ?human rdfs:label ?label bind("silver" as ?medal)} 
-	UNION {?event dbo:goldMedalist ?human . ?human rdfs:label ?label bind("gold" as ?medal)}
-	FILTER regex(?label, %ATHLETE%)
-	FILTER (lang(?label)='en')}}

@@ -1,0 +1,7 @@
+SELECT ?name
+WHERE{
+	SELECT ?name ?human
+	WHERE {?event rdf:type dbo:OlympicEvent{?event rdfs:label ?name . ?event dbo:bronzeMedalist ?human . ?human rdfs:label ?label }
+	FILTER regex(?label, %ATHLETE%)
+	FILTER (lang(?label)='en')
+        FILTER (lang(?name)='en')}}
