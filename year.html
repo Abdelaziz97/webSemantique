@@ -83,70 +83,6 @@
             </div>
           </div>
         </div>
-
-
-        <div class = "col-3 text-center">
-            <div id="pic-div">
-              <img src="https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg" id="pic" alt="Pic" class="img-thumbnail img-fluid"/>
-          </div>
-          <div class="col text-left">
-            <h4> General Information </h4>
-
-            <div>
-              <strong> Gender : </strong>
-              <span id="gender"> 
-              </span> <br/> 
-            </div>  
-
-            <div>
-              <strong> Height : </strong> 
-              <span id="height">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Weight : </strong>
-              <span id="weight">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Birth Date : </strong>
-              <span id="birthDate">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Birth Place : </strong>
-              <span id="birthPlace">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Sport : </strong>
-              <span id="sport">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Coach : </strong>
-              <span id="coach">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Club : </strong>
-              <span id="club">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Total medals number : </strong>
-              <span id="medalsNumber">  
-              </span> <br/>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -169,63 +105,10 @@
               var index = athleteURL.indexOf(athlete);
 
               if(athlete !== undefined && athlete !== null & index >= 0){
-                  var athlete_name = athleteList[index];
-                  $("#athlete-name").text(athlete_name);
-
-                  request("requetes/getByNameGender.txt", "#gender", athlete_name, (elem) => { 
-                      gender = elem.gender.value;
-                    return gender;
-                  });
-
-                  request("requetes/getByNameHeight.txt", "#height", athlete_name, (elem) => { 
-                    height = (Math.round(parseFloat(elem.height.value)*100)/100).toFixed(2)+ ' cm';
-                    return height;
-                  });
-
-                  request("requetes/getByNameWeight.txt", "#weight", athlete_name, (elem) => { 
-                    weight = Math.round(elem.weight.value/1000) + ' kg';
-                    return weight;
-                  });
-
-                  request("requetes/getByNameBirthDate.txt", "#birthDate", athlete_name, (elem) => { 
-                    birthDate = elem.date.value;
-                    return birthDate;
-                  });
-
-                  request("requetes/getByNameBirthPlace.txt", "#birthPlace", athlete_name, (elem) => { 
-                    birthPlace = elem.name.value;
-                    return birthPlace;
-                  });
 
                   request("requetes/getByNameAbstract.txt", "#abstract", athlete_name, (elem) => { 
                     birthPlace = elem.abstract.value;
                     return birthPlace;
-                  });
-
-
-                  request("requetes/getByNameSport.txt", "#sport", athlete_name, (elem) => { 
-                    sport = elem.name.value;
-                    return sport;
-                  });
-
-                  requestImage("requetes/getByNameImage.txt", "#pic", athlete_name, (elem) => { 
-                    pic = elem.image.value;
-                    return pic;
-                  });
-
-                  request("requetes/getByNameCoach.txt", "#coach", athlete_name, (elem) => { 
-                    coach = elem.name.value;
-                    return coach;
-                  });
-
-                  request("requetes/getByNameClub.txt", "#club", athlete_name, (elem) => { 
-                    club = elem.name.value;
-                    return club;
-                  });
-
-                  request("requetes/getByNameNbMedals.txt", "#medalsNumber", athlete_name, (elem) => { 
-                    medalsNumber = elem.count.value;
-                    return medalsNumber;
                   });
 
                   requestArray("requetes/getByNameEventBronze.txt", "#bronze", athlete_name, (elem) => { 
@@ -247,9 +130,7 @@
             });
           });
 
-
           $('#bouton_recherche').click(rechercher);
-
           
           function rechercher() {
             var url = window.location.href.split('?')[0];
