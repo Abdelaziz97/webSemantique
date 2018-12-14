@@ -2,4 +2,4 @@ SELECT DISTINCT ?event
 WHERE {
         ?event rdf:type dbo:OlympicEvent.
 }
-ORDER BY (?event)
+ORDER BY DESC(?event)

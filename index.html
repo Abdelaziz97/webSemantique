@@ -103,14 +103,20 @@
             });
           });
 
+          function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); } 
 
           $('#bouton_recherche').click(rechercher);
 
           function rechercher() {
             var url = window.location.href.split('?')[0];
-            var athlete = $('#recherche').val();
-
-            var newUrl = 'athlete.html' + '?athleteURL=' + athlete;
+            var value = $('#recherche').val();
+            var newUrl = "";
+            if(!isNumber(value)){
+              newUrl += 'athlete.html' + '?athleteURL=' + athleteURL[athleteList.indexOf(value)];
+            }
+            else{
+              newUrl = 'year.html' + '?yearURL=' + value;
+            }
             window.location = newUrl;
           };
 

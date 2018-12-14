@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Olymp'IF</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="awesomplete/awesomplete.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <script src="awesomplete/awesomplete.js" async></script>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+    <!-- include perso -->
+    <link rel="stylesheet" href="style.css">
+    <script src="js/autocomplete.js"></script>
+    <script src="js/util.js"></script>
+  </head>
+
+
+  <body>
+    <!-- nav bar -->
+    <div class="navbar navbar-dark bg-dark">
+      <div class="container-fluid justify-content-between">
+        <div class="text-left d-flex">
+          <a href="index.html" class="navbar-brand"><strong>Home</strong></a>
+        </div>
+        <div class="col text-center">
+          <h1 style="color:white">OLYMP'<i class="fa fa-trophy"></i>F</h1>
+        </div>
+        <div class="text-right">
+          <div id="autocomplete" class="autocomplete">
+            <button id="bouton_recherche" class="col-1 btn btn-success" type="submit"><i class="fa fa-search"></i></button>
+            <input id="recherche" class="form-control mdb-autocomplete" type="text" placeholder="Athlete name" value="" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!--Debut row -->
+    <div class="container-fluid">
+      <div class = "row text-center">
+        <div class="col">
+          <h1 id="athlete-name"></h1>
+        </div>
+      </div>
+
+      <div class = "row">      
+        <div class = "col-9">
+          <div class= "row">
+            <div class="col">
+              <h1> Description </h1>
+              <div class = "text-left" id="abstract">
+              </div>
+            </div>
+          </div>
+
+          <div class = "row">
+            <div class="col">
+              <h1> Medals </h1>  
+              <div id="medals">
+                <div>
+                  <h6> Gold : <i class="fa fa-trophy"></i></h6>
+                  <ul id="gold">
+                  </ul>
+                </div>
+                <div>
+                  <h6> Silver : <i class="fa fa-medal"></i></h6>
+                  <ul id="silver">
+                  </ul>
+                </div>
+                <div>
+                  <h6> Bronze : <i class="fas fa-frown"></i></h6>
+                  <ul id="bronze">
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class = "col-3 text-center">
+            <div id="pic-div">
+              <img src="https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg" id="pic" alt="Pic" class="img-thumbnail img-fluid"/>
+          </div>
+          <div class="col text-left">
+            <h4> General Information </h4>
+
+            <div>
+              <strong> Gender : </strong>
+              <span id="gender"> 
+              </span> <br/> 
+            </div>  
+
+            <div>
+              <strong> Height : </strong> 
+              <span id="height">  
+              </span> <br/>
+            </div>
+
+            <div>
+              <strong> Weight : </strong>
+              <span id="weight">  
+              </span> <br/>
+            </div>
+
+            <div>
+              <strong> Birth Date : </strong>
+              <span id="birthDate">  
+              </span> <br/>
+            </div>
+
+            <div>
+              <strong> Birth Place : </strong>
+              <span id="birthPlace">  
+              </span> <br/>
+            </div>
+
+            <div>
+              <strong> Sport : </strong>
+              <span id="sport">  
+              </span> <br/>
+            </div>
+
+            <div>
+              <strong> Coach : </strong>
+              <span id="coach">  
+              </span> <br/>
+            </div>
+
+            <div>
+              <strong> Club : </strong>
+              <span id="club">  
+              </span> <br/>
+            </div>
+
+            <div>
+              <strong> Total medals number : </strong>
+              <span id="medalsNumber">  
+              </span> <br/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+        var athleteURL = [];  
+        var athleteList = [];
+        var i = 1;
+
+        readTextFile("requetes/getAllMedalist.txt", function(query) {
+            var url = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
+            $.getJSON(url+"&callback=?", function(resultats) {
+              resultats.results.bindings.forEach(function(element) {
+                athleteURL.push(element.human.value);
+                athleteList.push(element.name.value);
+              });
+              autocomplete(document.getElementById('recherche'), document.getElementById("autocomplete"), athleteList, rechercher);
+
+              var athlete = getUrlParameter('athleteURL');
+              var index = athleteURL.indexOf(athlete);
+
+              if(athlete !== undefined && athlete !== null & index >= 0){
+                  var athlete_name = athleteList[index];
+                  $("#athlete-name").text(athlete_name);
+
+                  request("requetes/getByNameGender.txt", "#gender", athlete_name, (elem) => { 
+                      gender = elem.gender.value;
+                    return gender;
+                  });
+
+                  request("requetes/getByNameHeight.txt", "#height", athlete_name, (elem) => { 
+                    height = (Math.round(parseFloat(elem.height.value)*100)/100).toFixed(2)+ ' cm';
+                    return height;
+                  });
+
+                  request("requetes/getByNameWeight.txt", "#weight", athlete_name, (elem) => { 
+                    weight = Math.round(elem.weight.value/1000) + ' kg';
+                    return weight;
+                  });
+
+                  request("requetes/getByNameBirthDate.txt", "#birthDate", athlete_name, (elem) => { 
+                    birthDate = elem.date.value;
+                    return birthDate;
+                  });
+
+                  request("requetes/getByNameBirthPlace.txt", "#birthPlace", athlete_name, (elem) => { 
+                    birthPlace = elem.name.value;
+                    return birthPlace;
+                  });
+
+                  request("requetes/getByNameAbstract.txt", "#abstract", athlete_name, (elem) => { 
+                    birthPlace = elem.abstract.value;
+                    return birthPlace;
+                  });
+
+
+                  request("requetes/getByNameSport.txt", "#sport", athlete_name, (elem) => { 
+                    sport = elem.name.value;
+                    return sport;
+                  });
+
+                  requestImage("requetes/getByNameImage.txt", "#pic", athlete_name, (elem) => { 
+                    pic = elem.image.value;
+                    return pic;
+                  });
+
+                  request("requetes/getByNameCoach.txt", "#coach", athlete_name, (elem) => { 
+                    coach = elem.name.value;
+                    return coach;
+                  });
+
+                  request("requetes/getByNameClub.txt", "#club", athlete_name, (elem) => { 
+                    club = elem.name.value;
+                    return club;
+                  });
+
+                  request("requetes/getByNameNbMedals.txt", "#medalsNumber", athlete_name, (elem) => { 
+                    medalsNumber = elem.count.value;
+                    return medalsNumber;
+                  });
+
+                  requestArray("requetes/getByNameEventBronze.txt", "#bronze", athlete_name, (elem) => { 
+                    bronze = elem.name.value;
+                    return bronze;
+                  });
+
+                  requestArray("requetes/getByNameEventSilver.txt", "#silver", athlete_name, (elem) => { 
+                    silver = elem.name.value;
+                    return silver;
+                  });
+
+                  requestArray("requetes/getByNameEventGold.txt", "#gold", athlete_name, (elem) => { 
+                    gold = elem.name.value;
+                    return gold;
+                  });
+
+              }
+            });
+          });
+
+
+          $('#bouton_recherche').click(rechercher);
+
+          
+          function rechercher() {
+            var url = window.location.href.split('?')[0];
+            var athlete = $('#recherche').val();
+            var index = athleteList.indexOf(athlete);
+            var URL = athleteURL[index];
+
+            var newUrl = 'athlete.html' + '?athleteURL=' + URL;
+            window.location = newUrl;
+          };
+
+
+    </script>
+  </body>
+
+
+</html>
