@@ -1,0 +1,21 @@
+SELECT ?name ?labelSilver ?labelBronze ?imgGold ?imgSilver ?imgBronze
+WHERE{
+	SELECT ?name ?human ?labelSilver ?labelBronze ?imgGold ?imgSilver ?imgBronze
+	WHERE {?event rdf:type dbo:OlympicEvent{?event rdfs:label ?name . 
+                                                ?event dbo:goldMedalist ?human . 
+                                                ?human dbo:thumbnail ?imgGold.
+                                                ?human rdfs:label ?label.
+                                                ?event dbo:silverMedalist ?silver .
+                                                ?silver rdfs:label ?labelSilver.
+                                                ?silver dbo:thumbnail ?imgSilver.
+                                                ?event dbo:bronzeMedalist ?bronze .
+                                                ?bronze rdfs:label ?labelBronze. 
+                                                ?bronze dbo:thumbnail ?imgBronze.}
+	FILTER regex(?label,  %ATHLETE%)
+	FILTER (lang(?label)='en')
+        FILTER (lang(?labelSilver)='en')
+        FILTER (lang(?labelBronze)='en')
+        FILTER (lang(?name)='en')
+        
+        }
+}

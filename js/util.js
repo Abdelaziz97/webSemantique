@@ -72,3 +72,117 @@ function requestImage(filename, fieldId, capital, format) {
         });
     });
 }
+
+function requestPodium(filename, athlete){
+	readTextFile(filename, function(req) {
+        req = req.replace('%ATHLETE%', '"' + athlete + '"');
+        var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+        $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
+            var first = result = resultatsReq.results.bindings[0];
+            if (first !== undefined && first !== null) {
+				var event_name = first.name.value;
+                var label_silver = first.labelSilver.value;
+				var label_bronze = first.labelBronze.value;
+				var img_gold = first.imgGold.value;
+				var img_silver = first.imgSilver.value;
+				var img_bronze = first.imgBronze.value;
+				draw_podium(event_name,athlete,label_silver,label_bronze,img_gold,img_silver,img_bronze);
+		    } else {
+                $('#container').parent().hide();
+                $('#container').text("UNDEFINED");
+            }
+        });
+    });
+}
+
+function draw_podium(event_name,name_gold,name_silver,name_bronze,img_gold,img_silver,img_bronze) {
+	$('#container').highcharts({
+		chart: {
+			type: 'column'
+		},
+		title: {
+			text: event_name
+		},
+		xAxis: {
+			categories: false,
+			lineWidth: 0,
+			minorGridLineWidth: 0,
+			lineColor: 'transparent',
+			labels: {
+			   enabled: false
+		   },
+			minorTickLength: 0,
+			tickLength: 0
+		},
+		yAxis: {
+			min: 0,
+			gridLineWidth: 0,
+			title: {
+				text: false
+			},
+			labels: {
+			   enabled: false
+		   }
+		},
+		 legend: {
+			   enabled: false
+		   
+		},
+		tooltip: {
+			headerFormat: '<span style="font-size:10px"><b>{point.key}</b></span>',
+			pointFormat: '<span></span>',
+			shared: true,
+			useHTML: true,
+			positioner: function(boxWidth, boxHeight, point) {
+				return {
+					x: point.plotX,
+					y: point.plotY + 100
+				}
+			}
+		},
+		plotOptions: {
+			column: {
+				pointPadding: -0.3,
+				borderWidth: 0
+			}
+		},
+	   
+		series: [{
+			data:[
+				{name : name_silver, 
+				 color : "#C0C0C0",
+				 image : img_silver,
+				 y: 2
+				},
+				{name : name_gold, 
+				 color : "#FFD700",
+				 image : img_gold, 
+				 y : 3
+				},
+				{name : name_bronze,
+				 color : "#CD7F32",
+				 image : img_bronze,
+				 y: 1}
+			]
+			,
+			dataLabels: {
+				enabled: true,
+				color: 'white',
+				align: 'center',
+				x: 3,
+				y: 60,
+				useHTML: true,
+				overflow: false,
+				crop: false,
+				formatter: function() {
+					  return '<img src="'+this.point.image+'" style="width:50px;height:70px;" /> <br>' + (4 - this.y);  
+				},
+				style: {
+					fontSize: '50px',
+					fontFamily: 'Verdana, sans-serif',
+					textShadow: '0 0 3px black'
+				}
+			}
+		}]
+	});
+};

@@ -59,7 +59,7 @@
                 <img src="https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg" id="pic" alt="Pic" class="img-thumbnail img-fluid" style="width:300px;height:300px;"/>
               </div>
           </div>
-      </div>
+        </div>
 
       <br/><br/>
       <div class="row">
@@ -154,9 +154,17 @@
               </div>
             </div>
           </div>
-        </div>
+		  <script src="http://code.highcharts.com/highcharts.js"></script>
+		  <script src="http://code.highcharts.com/modules/exporting.js"></script>
+		  <div class= "row">
+            <div class="col">
+              <h1> Last Gold Podium</h1>
+				  <div id="container" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
+		    </div>
+		  </div>
       </div>
     </div>
+	</div>
 
 
     <script>
@@ -252,7 +260,8 @@
                     gold = elem.name.value;
                     return gold;
                   });
-
+				  
+				  requestPodium("requetes/getByNamePodium.txt",athlete_name);
               }
             })
           });
@@ -261,7 +270,7 @@
           $('#bouton_recherche').click(rechercher);
 
           
-          function rechercher() {
+        function rechercher() {
             var url = window.location.href.split('?')[0];
             var athlete = $('#recherche').val();
             var index = athleteList.indexOf(athlete);
@@ -269,9 +278,8 @@
 
             var newUrl = 'athlete.html' + '?athleteURL=' + URL;
             window.location = newUrl;
-          };
-
-
+        };
+		  
     </script>
   </body>
 
