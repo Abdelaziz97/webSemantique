@@ -207,7 +207,7 @@
                     return birthPlace;
                   });
 
-                  request("requetes/getByNameAbstract.txt", "#abstract", athlete_name, (elem) => { 
+                  requestSpotlight("requetes/getByNameAbstract.txt", "#abstract", athlete_name, (elem) => { 
                     birthPlace = elem.abstract.value;
                     return birthPlace;
                   });
