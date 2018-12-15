@@ -34,8 +34,11 @@
         </div>
         <div class="text-right">
           <div id="autocomplete" class="autocomplete">
-            <button id="bouton_recherche" class="col-1 btn btn-success" type="submit"><i class="fa fa-search"></i></button>
-            <input id="recherche" class="form-control mdb-autocomplete" type="text" placeholder="Athlete name" value="" />
+            <div class="input-group">
+              <span class="input-group-addon">
+                <input id="recherche" class="form-control mdb-autocomplete" type="text" placeholder="Search an olympic athlete" value="" />
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -43,15 +46,84 @@
 
 
     <!--Debut row -->
-    <div class="container-fluid">
+    <div class="container-fluid" id="content" >
       <div class = "row text-center">
-        <div class="col">
-          <h1 id="athlete-name"></h1>
+          <div class="col">
+            <h1 id="athlete-name"></h1>
+          </div>
         </div>
+
+        <div class = "row">
+          <div class = "col text-center">
+              <div id="pic-div">
+                <img src="https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg" id="pic" alt="Pic" class="img-thumbnail img-fluid" style="width:300px;height:300px;"/>
+              </div>
+          </div>
       </div>
 
-      <div class = "row">      
-        <div class = "col-9">
+      <br/><br/>
+      <div class="row">
+          <div class="col-12 text-center">
+            <h1> General Information </h1>
+          </div>
+
+          <div id="card" class="col card text-center">
+            <strong> Gender: </strong> <br/>
+            <span id="gender"> 
+            </span> <br/> 
+          </div>  
+
+          <div id="card" class="col card text-center">
+            <strong> Height: </strong> <br/>
+            <span id="height">  
+            </span> <br/>
+          </div>
+
+          <div id="card" class="col card text-center">
+            <strong> Weight: </strong> <br/>
+            <span id="weight">  
+            </span> <br/>
+          </div>
+
+          <div id="card" class="col card text-center">
+            <strong> Birth Date: </strong> <br/>
+            <span id="birthDate">  
+            </span> <br/>
+          </div>
+
+          <div id="card" class="col card text-center">
+            <strong> Birth Place: </strong> <br/>
+            <span id="birthPlace">  
+            </span> <br/>
+          </div>
+
+          <div id="card" class="col card text-center">
+            <strong> Sport: </strong> <br/>
+            <span id="sport">  
+            </span> <br/>
+          </div>
+
+          <div id="card" class="col card text-center">
+            <strong> Coach: </strong> <br/>
+            <span id="coach">  
+            </span> <br/>
+          </div>
+
+          <div id="card" class="col card text-center">
+            <strong > Club: </strong> <br/>
+            <span id="club">  
+            </span> <br/>
+          </div>
+
+          <div id="card" class="col card text-center">
+            <strong> Total medals: </strong> <br/>
+            <span id="medalsNumber">  
+            </span> <br/>
+          </div>
+      </div>
+
+      <div class="row">
+        <div class = "col">
           <div class= "row">
             <div class="col">
               <h1> Description </h1>
@@ -62,88 +134,24 @@
 
           <div class = "row">
             <div class="col">
-              <h1> Medals </h1>  
-              <div id="medals">
-                <div>
+              <h1> Medals </h1> 
+              <div class = "row" id="medals">
+                <div class = "col">
                   <h6> Gold : <i class="fa fa-trophy"></i></h6>
                   <ul id="gold">
                   </ul>
                 </div>
-                <div>
+                <div class = "col">
                   <h6> Silver : <i class="fa fa-medal"></i></h6>
                   <ul id="silver">
                   </ul>
                 </div>
-                <div>
+                <div class = "col">
                   <h6> Bronze : <i class="fas fa-frown"></i></h6>
                   <ul id="bronze">
                   </ul>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class = "col-3 text-center">
-            <div id="pic-div">
-              <img src="https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg" id="pic" alt="Pic" class="img-thumbnail img-fluid"/>
-          </div>
-          <div class="col text-left">
-            <h4> General Information </h4>
-
-            <div>
-              <strong> Gender : </strong>
-              <span id="gender"> 
-              </span> <br/> 
-            </div>  
-
-            <div>
-              <strong> Height : </strong> 
-              <span id="height">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Weight : </strong>
-              <span id="weight">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Birth Date : </strong>
-              <span id="birthDate">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Birth Place : </strong>
-              <span id="birthPlace">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Sport : </strong>
-              <span id="sport">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Coach : </strong>
-              <span id="coach">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Club : </strong>
-              <span id="club">  
-              </span> <br/>
-            </div>
-
-            <div>
-              <strong> Total medals number : </strong>
-              <span id="medalsNumber">  
-              </span> <br/>
             </div>
           </div>
         </div>
@@ -161,7 +169,10 @@
             $.getJSON(url+"&callback=?", function(resultats) {
               resultats.results.bindings.forEach(function(element) {
                 athleteURL.push(element.human.value);
-                athleteList.push(element.name.value);
+                let name = element.name.value;
+                if(name.includes("("))
+                  name = name.substring(0,name.indexOf("("));
+                athleteList.push(name);
               });
               autocomplete(document.getElementById('recherche'), document.getElementById("autocomplete"), athleteList, rechercher);
 
@@ -171,7 +182,6 @@
               if(athlete !== undefined && athlete !== null & index >= 0){
                   var athlete_name = athleteList[index];
                   $("#athlete-name").text(athlete_name);
-
                   request("requetes/getByNameGender.txt", "#gender", athlete_name, (elem) => { 
                       gender = elem.gender.value;
                     return gender;
@@ -244,7 +254,7 @@
                   });
 
               }
-            });
+            })
           });
 
 

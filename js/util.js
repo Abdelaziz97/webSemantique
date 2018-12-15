@@ -68,9 +68,6 @@ function requestImage(filename, fieldId, capital, format) {
             if (first !== undefined && first !== null) {
                 var result = format(first);
                 $(fieldId).attr("src", result);
-            } else {
-                $(fieldId).parent().hide();
-                $(fieldId).attr("alt", "Pas d'image trouvée");
             }
         });
     });
