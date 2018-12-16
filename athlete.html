@@ -98,6 +98,12 @@
           </div>
 
           <div id="card" class="col card text-center">
+            <strong> Nationality: </strong> <br/>
+            <span id="nationality">  
+            </span> <br/>
+          </div>
+
+          <div id="card" class="col card text-center">
             <strong> Sport: </strong> <br/>
             <span id="sport">  
             </span> <br/>
@@ -231,6 +237,11 @@
                   request("requetes/getByNameClub.txt", "#club", athlete_name, (elem) => { 
                     club = elem.name.value;
                     return club;
+                  });
+
+                  request("requetes/getByNameNationality.txt", "#nationality", athlete_name, (elem) => { 
+                    nationality = elem.nationality.value;
+                    return nationality;
                   });
 
                   request("requetes/getByNameNbMedals.txt", "#medalsNumber", athlete_name, (elem) => { 
