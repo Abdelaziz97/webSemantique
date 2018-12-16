@@ -16,7 +16,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
 
 function request(req, fieldId, athlete, format) {
     req = req.replace('%ATHLETE%', '"' + athlete + '"');
-    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    var reqUrl = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
     $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
         var first = result = resultatsReq.results.bindings[0];
         if (first !== undefined && first !== null) {
@@ -31,7 +31,7 @@ function request(req, fieldId, athlete, format) {
 
 function requestFromEvent(req, fieldId, athlete, format) {
     req = req.replace('%ATHLETE%', '"' + athlete + '"');
-    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    var reqUrl = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
     $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
         var first = result = resultatsReq.results.bindings[0];
         var result = format(first);
@@ -41,7 +41,7 @@ function requestFromEvent(req, fieldId, athlete, format) {
 
 function requestArray(req, fieldId, athlete, format) {
     req = req.replace('%ATHLETE%', '"' + athlete + '"');
-    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    var reqUrl = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
     $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
         var result = [];
 		for(let i=0;i<resultatsReq.results.bindings.length;++i){
@@ -63,7 +63,7 @@ function requestArray(req, fieldId, athlete, format) {
 
 function requestImageArray(req, fieldId, athlete, index, format) {
     req = req.replace('%ATHLETE%', '"' + athlete + '"');
-    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    var reqUrl = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
     $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
         var first = resultatsReq.results.bindings[0];
         var e = "<tr><td><img src=\"https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif\" class=\"img-thumbnail img-fluid\" style=\"width:80px;height:80px;\"/></td><td id=\"label"+index+"\"></td><td id=\"abstract"+index+"\"></td><td id=\"gold"+index+"\"><a id=\"goldRef"+index+"\"></a></td><td id=\"silver"+index+"\"><a id=\"silverRef"+index+"\"></a></td><td id=\"bronze"+index+"\"><a id=\"bronzeRef"+index+"\"></a></td></tr>";
@@ -76,7 +76,7 @@ function requestImageArray(req, fieldId, athlete, index, format) {
 
 function requestImage(req, fieldId, athlete, format) {
     req = req.replace('%ATHLETE%', '"' + athlete + '"');
-    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    var reqUrl = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
     $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
         var first = result = resultatsReq.results.bindings[0];
         if (first !== undefined && first !== null) {
@@ -90,7 +90,7 @@ function requestPodiumByEvent(name_event){
 	tmp = name_event.replace("£","\'");
 	req = queries.getByEventPodium;
     req = req.replace('%ATHLETE%', '"' + tmp + '"');
-    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    var reqUrl = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
     $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
         var first = result = resultatsReq.results.bindings[0];
         if (first !== undefined && first !== null) {
@@ -126,7 +126,7 @@ function requestPodiumByEvent(name_event){
 
 function requestPodium(req, athlete){
     req = req.replace('%ATHLETE%', '"' + athlete + '"');
-    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    var reqUrl = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
     $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
         var first = result = resultatsReq.results.bindings[0];
         if (first !== undefined && first !== null) {
@@ -161,7 +161,7 @@ function requestPodium(req, athlete){
 
 function requestSpotlight(req, fieldId, athlete, format) {
     req = req.replace('%ATHLETE%', '"' + athlete + '"');
-    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    var reqUrl = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
     $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
         var first = result = resultatsReq.results.bindings[0];
         if (first !== undefined && first !== null) {
@@ -281,7 +281,7 @@ function spotlight(abstract, callback) {
 
 function getAllMedalistAndEvents(document, athleteList, athleteURL, yearList, yearURL, callback){
 	var query = queries.getAllMedalist;
-	var url = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
+	var url = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
 	$.getJSON(url+"&callback=?", function(resultats) {
 	  resultats.results.bindings.forEach(function(element) {
 	    athleteURL.push(element.human.value);
@@ -295,7 +295,7 @@ function getAllMedalistAndEvents(document, athleteList, athleteURL, yearList, ye
 	});
 
 	query = queries.getAllEvents;
-	var url = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
+	var url = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
 	var urlGame = "http://dbpedia.org/resource/";
 	$.getJSON(url+"&callback=?", function(resultats) {
 	    resultats.results.bindings.forEach(function(element) {
