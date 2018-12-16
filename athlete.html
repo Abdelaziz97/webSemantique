@@ -26,20 +26,17 @@
     <!-- nav bar -->
     <div class="navbar navbar-dark bg-dark">
       <div class="container-fluid justify-content-between">
-        <div class="text-left d-flex">
+        <div class="col text-left d-flex">
           <a href="index.html" class="navbar-brand"><strong>Home</strong></a>
         </div>
         <div class="col text-center">
           <h1 style="color:white">OLYMP'<i class="fa fa-trophy"></i>F</h1>
         </div>
-        <div class="text-right">
-          <div id="autocomplete" class="autocomplete">
-            <div class="input-group">
-              <span class="input-group-addon">
+        <div id="autocomplete" class="col autocomplete">
                 <input id="recherche" class="form-control mdb-autocomplete" type="text" placeholder="Search an olympic athlete" value="" />
-              </span>
-            </div>
-          </div>
+        </div>
+        <div id="autocompleteEvent" class="col autocomplete">
+            <input id="rechercheEvent" class="form-control mdb-autocomplete" type="text" placeholder="Event's year" value="" />
         </div>
       </div>
     </div>
@@ -176,7 +173,20 @@
     <script>
         var athleteURL = [];  
         var athleteList = [];
-        var i = 1;
+        var yearURL = [];  
+        var yearList = [];
+
+        readTextFile("requetes/getAllEvents.txt", function(query) {
+            var url = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
+            var urlGame = "http://dbpedia.org/resource/";
+            $.getJSON(url+"&callback=?", function(resultats) {
+                resultats.results.bindings.forEach(function(element) {
+                yearList.push(element.games.value);
+                yearURL.push(urlGame+element.games.value);
+              });
+              autocomplete(document.getElementById('rechercheEvent'), document.getElementById("autocompleteEvent"), yearList, rechercherEvent);
+          })
+        });
 
         readTextFile("requetes/getAllMedalist.txt", function(query) {
             var url = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
@@ -287,6 +297,14 @@
             var newUrl = 'athlete.html' + '?athleteURL=' + URL;
             window.location = newUrl;
           });
+
+        function rechercherEvent() {
+          var url = window.location.href.split('?')[0];
+          var value = $('#rechercheEvent').val();
+          var newUrl = "";
+          newUrl = 'year.html' + '?yearURL=' + yearURL[yearList.indexOf(value)];
+          window.location = newUrl;
+        };
           
         function rechercher() {
             var url = window.location.href.split('?')[0];
