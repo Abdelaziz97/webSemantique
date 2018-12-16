@@ -272,7 +272,7 @@
                     return gold;
                   });
 				  
-				          requestPodium("requetes/getByNamePodium.txt",athlete_name);
+				  requestPodium("requetes/getByNamePodium.txt",athlete_name);
               }
             })
           });
@@ -280,7 +280,7 @@
 
           $('#bouton_recherche').click(rechercher);
 
-           $('#container').click(function(event){
+          $('#container').click(function(event){
             var athlete = event.target.point.name;
             var index = athleteList.indexOf(athlete);
             var URL = athleteURL[index];

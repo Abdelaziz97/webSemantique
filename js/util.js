@@ -48,7 +48,9 @@ function requestArray(filename, fieldId, athlete, format) {
 			result.sort().reverse();
             if (result.length>0) {
             	for(let i=0;i<resultatsReq.results.bindings.length;++i){
-					var e = $("<li></li>");
+					var event_name = result[i].replace("\'", "£");
+					//console.log(event_name);
+					var e = $('<li onclick=\'requestPodiumByEvent("'+event_name+'");\' ></li>');
 					e.html(result[i]);
 	        		$(fieldId).append(e);
 				}
@@ -93,6 +95,44 @@ function requestImage(filename, fieldId, athlete, format) {
     });
 }
 
+function requestPodiumByEvent(name_event){
+	readTextFile("requetes/getByEventPodium.txt", function(req) {
+		tmp = name_event.replace("£","\'");
+        req = req.replace('%EVENT%', '"' + tmp + '"');
+        var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+        $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
+            var first = result = resultatsReq.results.bindings[0];
+            if (first !== undefined && first !== null) {
+				var event_name = first.name.value;
+				var label_gold = first.labelGold.value;
+                var label_silver = first.labelSilver.value;
+				var label_bronze = first.labelBronze.value;
+				var img_gold;
+				var img_silver;
+				var img_bronze;
+				if (first.imgGold !== undefined && first.imgGold.value !== null) {
+					img_gold = first.imgGold.value;
+				}else{
+					img_gold = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
+				}
+				if (first.imgSilver !== undefined && first.imgSilver.value !== null) {
+					img_silver = first.imgSilver.value;
+				}else{
+					img_silver = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
+				}
+				if (first.imgBronze !== undefined && first.imgBronze !== null) {
+					img_bronze = first.imgBronze.value;
+				}else{
+					img_bronze = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
+				}
+				draw_podium(event_name,label_gold,label_silver,label_bronze,img_gold,img_silver,img_bronze);
+		    } else {
+                $('#container').parent().hide();
+                $('#container').text("UNDEFINED");
+			}
+		});
+	});	
+}
 
 function requestPodium(filename, athlete){
 	readTextFile(filename, function(req) {
@@ -104,9 +144,24 @@ function requestPodium(filename, athlete){
 				var event_name = first.name.value;
                 var label_silver = first.labelSilver.value;
 				var label_bronze = first.labelBronze.value;
-				var img_gold = first.imgGold.value;
-				var img_silver = first.imgSilver.value;
-				var img_bronze = first.imgBronze.value;
+				var img_gold;
+				var img_silver;
+				var img_bronze;
+				if (first.imgGold !== undefined && first.imgGold.value !== null) {
+					img_gold = first.imgGold.value;
+				}else{
+					img_gold = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
+				}
+				if (first.imgSilver !== undefined && first.imgSilver.value !== null) {
+					img_silver = first.imgSilver.value;
+				}else{
+					img_silver = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
+				}
+				if (first.imgBronze !== undefined && first.imgBronze !== null) {
+					img_bronze = first.imgBronze.value;
+				}else{
+					img_bronze = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
+				}
 				draw_podium(event_name,athlete,label_silver,label_bronze,img_gold,img_silver,img_bronze);
 		    } else {
                 $('#container').parent().hide();
