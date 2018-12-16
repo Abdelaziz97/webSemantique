@@ -101,7 +101,7 @@
           query = queries.getByEventEvents;
           query = query.replace('%ATHLETE%', '"' + yearList[yearURL.indexOf(year)].split(" ").join("_") + '"');
           $("#year-name").html(yearList[yearURL.indexOf(year)]);
-          var queryUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
+          var queryUrl = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
           $.getJSON(queryUrl+"&callback=?", function(resultats) {
             resultats.results.bindings.forEach(function(element) {
               eventList.push(element.event.value);
