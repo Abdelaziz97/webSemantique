@@ -66,13 +66,8 @@ function requestImageArray(filename, fieldId, athlete, index, format) {
         $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
             var first = resultatsReq.results.bindings[0];
             var e = "<tr><td><img src=\"https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif\" class=\"img-thumbnail img-fluid\" style=\"width:80px;height:80px;\"/></td><td id=\"label"+index+"\"></td></tr>";
-            if (first !== undefined && first !== null) {
-            	let result = format(first);
-            	e = e.replace('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',result);
-            }
-            else{
-            	e = e.replace('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif','https://societeenangleterre.com/wp-content/themes/consultix/images/no-image-found-360x260.png');
-            }
+            var result = format(first);
+            e = e.replace('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',result);
             e = $(e);
             $(fieldId).append(e);
         });

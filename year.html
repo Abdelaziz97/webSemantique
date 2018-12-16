@@ -34,7 +34,6 @@
         </div>
         <div class="text-right">
           <div id="autocomplete" class="autocomplete">
-            <button id="bouton_recherche" class="col-1 btn btn-success" type="submit"><i class="fa fa-search"></i></button>
             <input id="recherche" class="form-control mdb-autocomplete" type="text" placeholder="Event's year" value="" />
           </div>
         </div>
@@ -97,12 +96,12 @@
                         label = elem2.label.value;
                         return label;
                       });
-                      pic = elem.image.value;
-                      if(pic===undefined || pic===null){
-                        console.log("undefined");
+                      if(elem===undefined || elem===null){
                         return "https://societeenangleterre.com/wp-content/themes/consultix/images/no-image-found-360x260.png";
+                      }else{
+                        pic = elem.image.value;
+                        return pic;
                       }
-                      return pic;
                     });
                   }
                 });                  
