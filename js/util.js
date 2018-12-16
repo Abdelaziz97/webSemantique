@@ -36,6 +36,18 @@ function request(filename, fieldId, athlete, format) {
     });
 }
 
+function requestFromEvent(filename, fieldId, athlete, format) {
+    readTextFile(filename, function(req) {
+        req = req.replace('%ATHLETE%', '"' + athlete + '"');
+        var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+        $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
+            var first = result = resultatsReq.results.bindings[0];
+            var result = format(first);
+            $(fieldId).html(result);
+        });
+    });
+}
+
 function requestArray(filename, fieldId, athlete, format) {
     readTextFile(filename, function(req) {
         req = req.replace('%ATHLETE%', '"' + athlete + '"');
@@ -67,14 +79,9 @@ function requestImageArray(filename, fieldId, athlete, index, format) {
         var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
         $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
             var first = resultatsReq.results.bindings[0];
-            var e = "<tr><td><img src=\"https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif\" class=\"img-thumbnail img-fluid\" style=\"width:80px;height:80px;\"/></td><td id=\"label"+index+"\"></td></tr>";
-            if (first !== undefined && first !== null) {
-            	let result = format(first);
-            	e = e.replace('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',result);
-            }
-            else{
-            	e = e.replace('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif','https://societeenangleterre.com/wp-content/themes/consultix/images/no-image-found-360x260.png');
-            }
+            var e = "<tr><td><img src=\"https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif\" class=\"img-thumbnail img-fluid\" style=\"width:80px;height:80px;\"/></td><td id=\"label"+index+"\"></td><td id=\"abstract"+index+"\"></td><td id=\"gold"+index+"\"><a id=\"goldRef"+index+"\"></a></td><td id=\"silver"+index+"\"><a id=\"silverRef"+index+"\"></a></td><td id=\"bronze"+index+"\"><a id=\"bronzeRef"+index+"\"></a></td></tr>";
+            var result = format(first);
+            e = e.replace('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',result);
             e = $(e);
             $(fieldId).append(e);
         });
