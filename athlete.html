@@ -278,15 +278,15 @@
           });
 
 
-          $('#bouton_recherche').click(rechercher);
+        $('#bouton_recherche').click(rechercher);
 
-           $('#container').click(function(event){
-            var athlete = event.target.point.name;
-            var index = athleteList.indexOf(athlete);
-            var URL = athleteURL[index];
-            var newUrl = 'athlete.html' + '?athleteURL=' + URL;
-            window.location = newUrl;
-          });
+        $('#container').click(function(event){
+          var athlete = event.target.point.name;
+          var index = athleteList.indexOf(athlete);
+          var URL = athleteURL[index];
+          var newUrl = 'athlete.html' + '?athleteURL=' + URL;
+          window.location = newUrl;
+        });
           
         function rechercher() {
             var url = window.location.href.split('?')[0];

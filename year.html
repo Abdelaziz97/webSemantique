@@ -49,11 +49,15 @@
         </div>
       </div>
 
-      <table class="table table-striped table-bordered">
+      <table class="table table-striped table-bordered" id="table">
         <thead>
           <tr>
             <th scope="col">Image</th>
             <th scope="col">Events</th>
+            <th scope="col">Abstract</th>
+            <th scope="col">Gold</th>
+            <th scope="col">Silver</th>
+            <th scope="col">Bronze</th>
           </tr>
         </thead>
         <tbody id="pic">
@@ -76,6 +80,9 @@
                 yearList.push(element.games.value);
                 yearURL.push(urlGame+element.games.value);
               });
+              indexToDelete = yearList.indexOf("2016  Summer");
+              yearList.splice(indexToDelete, 1);
+              yearURL.splice(indexToDelete, 1);
               autocomplete(document.getElementById('recherche'), document.getElementById("autocomplete"), yearList, rechercher);
 
               var year = getUrlParameter('yearURL');
@@ -92,16 +99,57 @@
                   for(let i=0; i<eventList.length; ++i){
                     let event_name = eventList[i];
                     requestImageArray("requetes/getByEventImage.txt", "#pic", event_name, i, (elem) => {
+
                       request("requetes/getByEventLabel.txt", "#label"+i, event_name, (elem2) => {
                         label = elem2.label.value;
                         return label;
                       });
+
+                      request("requetes/getByEventAbstract.txt", "#abstract"+i, event_name, (elem2) => {
+                        abstract = elem2.abstract.value;
+                        return abstract;
+                      });
+
+                      requestFromEvent("requetes/getByEventBronze.txt", "#bronzeRef"+i, event_name, (elem2) => {
+                        if(elem2===undefined || elem2===null){
+                          return "NOT FOUND";
+                        }else{
+                          bronze = elem2.label.value;
+                          var URL = 'athlete.html' + '?athleteURL=' + elem2.bronze.value;
+                          $("#bronzeRef"+i).attr("href", URL);
+                          return bronze;
+                        }
+                      });
+
+                      requestFromEvent("requetes/getByEventSilver.txt", "#silverRef"+i, event_name, (elem2) => {
+                        if(elem2===undefined || elem2===null){
+                          return "NOT FOUND";
+                        }else{
+                          silver = elem2.label.value;
+                          var URL = 'athlete.html' + '?athleteURL=' + elem2.silver.value;
+                          $("#silverRef"+i).attr("href", URL);
+                          return silver;
+                        }
+                      });
+
+                      requestFromEvent("requetes/getByEventGold.txt", "#goldRef"+i, event_name, (elem2) => {
+                        if(elem2===undefined || elem2===null){
+                          return "NOT FOUND";
+                        }else{
+                          gold = elem2.label.value;
+                          var URL = 'athlete.html' + '?athleteURL=' + elem2.gold.value;
+                          $("#goldRef"+i).attr("href", URL);
+                          return gold;
+                        }
+                      });
+
                       if(elem===undefined || elem===null){
                         return "https://societeenangleterre.com/wp-content/themes/consultix/images/no-image-found-360x260.png";
                       }else{
                         pic = elem.image.value;
                         return pic;
                       }
+
                     });
                   }
                 });                  
@@ -111,6 +159,14 @@
 
           $('#bouton_recherche').click(rechercher);
           
+          $('#table').click(function(event){
+            /*var athlete = event.target.point.name;
+            var index = athleteList.indexOf(athlete);
+            var URL = athleteURL[index];
+            var newUrl = 'athlete.html' + '?athleteURL=' + URL;
+            window.location = newUrl;*/
+          });
+
           function rechercher() {
             var url = window.location.href.split('?')[0];
             var year = $('#recherche').val();
