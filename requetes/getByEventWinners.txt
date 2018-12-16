@@ -15,5 +15,5 @@ WHERE {
              ?gold rdfs:label ?namegold.
              FILTER langMatches(lang(?namegold),'en')
 
-FILTER regex(?namevent, %EVENT%)
+FILTER regex(?namevent, %ATHLETE%)
 }

@@ -35,7 +35,7 @@
         <div class="text-right">
           <div id="autocomplete" class="autocomplete">
             <button id="bouton_recherche" class="col-1 btn btn-success" type="submit"><i class="fa fa-search"></i></button>
-            <input id="recherche" class="form-control mdb-autocomplete" type="text" placeholder="Athlete name" value="" />
+            <input id="recherche" class="form-control mdb-autocomplete" type="text" placeholder="Event's year" value="" />
           </div>
         </div>
       </div>
@@ -46,87 +46,66 @@
     <div class="container-fluid">
       <div class = "row text-center">
         <div class="col">
-          <h1 id="athlete-name"></h1>
+          <h1 id="year-name"></h1>
         </div>
       </div>
 
-      <div class = "row">      
-        <div class = "col-9">
-          <div class= "row">
-            <div class="col">
-              <h1> Description </h1>
-              <div class = "text-left" id="abstract">
-              </div>
-            </div>
-          </div>
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Image</th>
+            <th scope="col">Events</th>
+          </tr>
+        </thead>
+        <tbody id="pic">
+        </tbody>
+      </table>
 
-          <div class = "row">
-            <div class="col">
-              <h1> Medals </h1>  
-              <div id="medals">
-                <div>
-                  <h6> Gold : <i class="fa fa-trophy"></i></h6>
-                  <ul id="gold">
-                  </ul>
-                </div>
-                <div>
-                  <h6> Silver : <i class="fa fa-medal"></i></h6>
-                  <ul id="silver">
-                  </ul>
-                </div>
-                <div>
-                  <h6> Bronze : <i class="fas fa-frown"></i></h6>
-                  <ul id="bronze">
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
 
     <script>
-        var athleteURL = [];  
-        var athleteList = [];
+        var yearURL = [];  
+        var yearList = [];
         var i = 1;
 
-        readTextFile("requetes/getAllMedalist.txt", function(query) {
+        readTextFile("requetes/getAllEvents.txt", function(query) {
             var url = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
+            var urlGame = "http://dbpedia.org/resource/";
             $.getJSON(url+"&callback=?", function(resultats) {
-              resultats.results.bindings.forEach(function(element) {
-                athleteURL.push(element.human.value);
-                athleteList.push(element.name.value);
+                resultats.results.bindings.forEach(function(element) {
+                yearList.push(element.games.value);
+                yearURL.push(urlGame+element.games.value);
               });
-              autocomplete(document.getElementById('recherche'), document.getElementById("autocomplete"), athleteList, rechercher);
+              autocomplete(document.getElementById('recherche'), document.getElementById("autocomplete"), yearList, rechercher);
 
-              var athlete = getUrlParameter('athleteURL');
-              var index = athleteURL.indexOf(athlete);
+              var year = getUrlParameter('yearURL');
+              var eventList = [];
 
-              if(athlete !== undefined && athlete !== null & index >= 0){
-
-                  request("requetes/getByNameAbstract.txt", "#abstract", athlete_name, (elem) => { 
-                    birthPlace = elem.abstract.value;
-                    return birthPlace;
+              readTextFile("requetes/getByEventEvents.txt", function(query){
+                query = query.replace('%ATHLETE%', '"' + yearList[yearURL.indexOf(year)].split(" ").join("_") + '"');
+                $("#year-name").html(yearList[yearURL.indexOf(year)]);
+                var queryUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
+                $.getJSON(queryUrl+"&callback=?", function(resultats) {
+                  resultats.results.bindings.forEach(function(element) {
+                    eventList.push(element.event.value);
                   });
+                  for(let i=0; i<eventList.length; ++i){
+                    let event_name_pic = eventList[i]+i;
+                    let event_name = eventList[i];  
 
-                  requestArray("requetes/getByNameEventBronze.txt", "#bronze", athlete_name, (elem) => { 
-                    bronze = elem.name.value;
-                    return bronze;
-                  });
+                    requestImageArray("requetes/getByEventImage.txt", "#pic", event_name_pic, (elem) => { 
+                      request("requetes/getByEventLabel.txt", "#label"+i, event_name, (elem) => {
+                        label = elem.label.value;
+                        return label;
+                      });
+                      pic = elem.image.value;
+                      return pic;
+                    });
 
-                  requestArray("requetes/getByNameEventSilver.txt", "#silver", athlete_name, (elem) => { 
-                    silver = elem.name.value;
-                    return silver;
-                  });
-
-                  requestArray("requetes/getByNameEventGold.txt", "#gold", athlete_name, (elem) => { 
-                    gold = elem.name.value;
-                    return gold;
-                  });
-
-              }
+                  }
+                });                  
+              });
             });
           });
 
@@ -134,11 +113,11 @@
           
           function rechercher() {
             var url = window.location.href.split('?')[0];
-            var athlete = $('#recherche').val();
-            var index = athleteList.indexOf(athlete);
-            var URL = athleteURL[index];
+            var year = $('#recherche').val();
+            var index = yearList.indexOf(year);
+            var URL = yearURL[index];
 
-            var newUrl = 'athlete.html' + '?athleteURL=' + URL;
+            var newUrl = 'year.html' + '?yearURL=' + URL;
             window.location = newUrl;
           };
 
