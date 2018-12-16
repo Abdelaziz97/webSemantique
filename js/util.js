@@ -73,6 +73,7 @@ function requestImage(filename, fieldId, capital, format) {
     });
 }
 
+
 function requestPodium(filename, athlete){
 	readTextFile(filename, function(req) {
         req = req.replace('%ATHLETE%', '"' + athlete + '"');
@@ -90,6 +91,25 @@ function requestPodium(filename, athlete){
 		    } else {
                 $('#container').parent().hide();
                 $('#container').text("UNDEFINED");
+			}
+		});
+	});
+}
+
+function requestSpotlight(filename, fieldId, capital, format) {
+    readTextFile(filename, function(req) {
+        req = req.replace('%ATHLETE%', '"' + capital + '"');
+        var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+        $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
+            var first = result = resultatsReq.results.bindings[0];
+            if (first !== undefined && first !== null) {
+                var result = format(first);
+                spotlight(result, function(newResult) {
+                    $(fieldId).html(newResult);
+                });
+            } else {
+                $(fieldId).parent().hide();
+                $(fieldId).text("UNDEFINED");
             }
         });
     });
@@ -186,3 +206,13 @@ function draw_podium(event_name,name_gold,name_silver,name_bronze,img_gold,img_s
 		}]
 	});
 };
+
+function spotlight(abstract, callback) {
+    var url = "https://api.dbpedia-spotlight.org/en/annotate?text=" + encodeURIComponent(abstract) + "&confidence=0.9";
+    $.get(url, function(result) {
+        var index1 = result.indexOf("<div>") + 5;
+        var index2 = result.indexOf("</div>");
+        var newAbstract = result.substring(index1, index2);
+        callback(newAbstract);
+    });
+}
