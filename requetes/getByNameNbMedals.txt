@@ -1,8 +1,0 @@
-SELECT ?count 
-WHERE{
-	SELECT (count(*) as ?count) 
-	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human . ?human rdfs:label ?label  } 
-	UNION {?event dbo:silverMedalist ?human. ?human rdfs:label ?label} 
-	UNION {?event dbo:goldMedalist ?human. ?human rdfs:label ?label}
-	FILTER regex(?label, %ATHLETE%)
-        FILTER (lang(?label) = 'en')}}

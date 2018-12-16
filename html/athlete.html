@@ -7,18 +7,17 @@
     <title>Olymp'IF</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="awesomplete/awesomplete.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
-    <script src="awesomplete/awesomplete.js" async></script>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 
     <!-- include perso -->
-    <link rel="stylesheet" href="style.css">
-    <script src="js/autocomplete.js"></script>
-    <script src="js/util.js"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/autocomplete.js"></script>
+    <script src="../js/util.js"></script>
+    <script src="../js/queries.js"></script>
   </head>
 
 
@@ -161,7 +160,7 @@
 		  <script src="http://code.highcharts.com/modules/exporting.js"></script>
 		  <div class= "row">
             <div class="col">
-              <h1> Last Gold Podium</h1>
+              <h1>Podium</h1>
 				  <div id="container" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
 		    </div>
 		  </div>
@@ -176,119 +175,8 @@
         var yearURL = [];  
         var yearList = [];
 
-        readTextFile("requetes/getAllEvents.txt", function(query) {
-            var url = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
-            var urlGame = "http://dbpedia.org/resource/";
-            $.getJSON(url+"&callback=?", function(resultats) {
-                resultats.results.bindings.forEach(function(element) {
-                yearList.push(element.games.value);
-                yearURL.push(urlGame+element.games.value);
-              });
-              var indexToDelete = yearList.indexOf("2016  Summer");
-              yearList.splice(indexToDelete, 1);
-              yearURL.splice(indexToDelete, 1);
-              autocomplete(document.getElementById('rechercheEvent'), document.getElementById("autocompleteEvent"), yearList, rechercherEvent);
-          })
-        });
-
-        readTextFile("requetes/getAllMedalist.txt", function(query) {
-            var url = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
-            $.getJSON(url+"&callback=?", function(resultats) {
-              resultats.results.bindings.forEach(function(element) {
-                athleteURL.push(element.human.value);
-                let name = element.name.value;
-                if(name.includes("("))
-                  name = name.substring(0,name.indexOf("("));
-                athleteList.push(name);
-              });
-              autocomplete(document.getElementById('recherche'), document.getElementById("autocomplete"), athleteList, rechercher);
-
-              var athlete = getUrlParameter('athleteURL');
-              var index = athleteURL.indexOf(athlete);
-
-              if(athlete !== undefined && athlete !== null & index >= 0){
-                  var athlete_name = athleteList[index];
-                  $("#athlete-name").text(athlete_name);
-                  request("requetes/getByNameGender.txt", "#gender", athlete_name, (elem) => { 
-                      gender = elem.gender.value;
-                    return gender;
-                  });
-
-                  request("requetes/getByNameHeight.txt", "#height", athlete_name, (elem) => { 
-                    height = (Math.round(parseFloat(elem.height.value)*100)/100).toFixed(2)+ ' cm';
-                    return height;
-                  });
-
-                  request("requetes/getByNameWeight.txt", "#weight", athlete_name, (elem) => { 
-                    weight = Math.round(elem.weight.value/1000) + ' kg';
-                    return weight;
-                  });
-
-                  request("requetes/getByNameBirthDate.txt", "#birthDate", athlete_name, (elem) => { 
-                    birthDate = elem.date.value;
-                    return birthDate;
-                  });
-
-                  request("requetes/getByNameBirthPlace.txt", "#birthPlace", athlete_name, (elem) => { 
-                    birthPlace = elem.name.value;
-                    return birthPlace;
-                  });
-
-                  requestSpotlight("requetes/getByNameAbstract.txt", "#abstract", athlete_name, (elem) => { 
-                    birthPlace = elem.abstract.value;
-                    return birthPlace;
-                  });
-
-
-                  request("requetes/getByNameSport.txt", "#sport", athlete_name, (elem) => { 
-                    sport = elem.name.value;
-                    return sport;
-                  });
-
-                  requestImage("requetes/getByNameImage.txt", "#pic", athlete_name, (elem) => { 
-                    pic = elem.image.value;
-                    return pic;
-                  });
-
-                  request("requetes/getByNameCoach.txt", "#coach", athlete_name, (elem) => { 
-                    coach = elem.name.value;
-                    return coach;
-                  });
-
-                  request("requetes/getByNameClub.txt", "#club", athlete_name, (elem) => { 
-                    club = elem.name.value;
-                    return club;
-                  });
-
-                  request("requetes/getByNameNationality.txt", "#nationality", athlete_name, (elem) => { 
-                    nationality = elem.nationality.value;
-                    return nationality;
-                  });
-
-                  request("requetes/getByNameNbMedals.txt", "#medalsNumber", athlete_name, (elem) => { 
-                    medalsNumber = elem.count.value;
-                    return medalsNumber;
-                  });
-
-                  requestArray("requetes/getByNameEventBronze.txt", "#bronze", athlete_name, (elem) => { 
-                    bronze = elem.name.value;
-                    return bronze;
-                  });
-
-                  requestArray("requetes/getByNameEventSilver.txt", "#silver", athlete_name, (elem) => { 
-                    silver = elem.name.value;
-                    return silver;
-                  });
-
-                  requestArray("requetes/getByNameEventGold.txt", "#gold", athlete_name, (elem) => { 
-                    gold = elem.name.value;
-                    return gold;
-                  });
-				  
-				  requestPodium("requetes/getByNamePodium.txt",athlete_name);
-              }
-            })
-          });
+        getAllMedalistAndEvents(document, athleteList, athleteURL, yearList, yearURL, fillAthlete);
+              
 
 
         $('#bouton_recherche').click(rechercher);
@@ -319,6 +207,92 @@
             window.location = newUrl;
         };
 		  
+        function fillAthlete() {
+          var athlete = getUrlParameter('athleteURL');
+          var index = athleteURL.indexOf(athlete);
+
+          if(athlete !== undefined && athlete !== null & index >= 0){
+              var athlete_name = athleteList[index];
+              $("#athlete-name").text(athlete_name);
+              request(queries.getByNameGender, "#gender", athlete_name, (elem) => { 
+                gender = elem.gender.value;
+                return gender;
+              });
+
+              request(queries.getByNameHeight, "#height", athlete_name, (elem) => { 
+                height = (Math.round(parseFloat(elem.height.value)*100)/100).toFixed(2)+ ' cm';
+                return height;
+              });
+
+              request(queries.getByNameWeight, "#weight", athlete_name, (elem) => { 
+                weight = Math.round(elem.weight.value/1000) + ' kg';
+                return weight;
+              });
+
+              request(queries.getByNameBirthDate, "#birthDate", athlete_name, (elem) => { 
+                birthDate = elem.date.value;
+                return birthDate;
+              });
+
+              request(queries.getByNameBirthPlace, "#birthPlace", athlete_name, (elem) => { 
+                birthPlace = elem.name.value;
+                return birthPlace;
+              });
+
+              requestSpotlight(queries.getByNameAbstract, "#abstract", athlete_name, (elem) => { 
+                birthPlace = elem.abstract.value;
+                return birthPlace;
+              });
+
+
+              request(queries.getByNameSport, "#sport", athlete_name, (elem) => { 
+                sport = elem.name.value;
+                return sport;
+              });
+
+              requestImage(queries.getByNameImage, "#pic", athlete_name, (elem) => { 
+                pic = elem.image.value;
+                return pic;
+              });
+
+              request(queries.getByNameCoach, "#coach", athlete_name, (elem) => { 
+                coach = elem.name.value;
+                return coach;
+              });
+
+              request(queries.getByNameClub, "#club", athlete_name, (elem) => { 
+                club = elem.name.value;
+                return club;
+              });
+
+              request(queries.getByNameNationality, "#nationality", athlete_name, (elem) => { 
+                nationality = elem.nationality.value;
+                return nationality;
+              });
+
+              request(queries.getByNameNbMedals, "#medalsNumber", athlete_name, (elem) => { 
+                medalsNumber = elem.count.value;
+                return medalsNumber;
+              });
+
+              requestArray(queries.getByNameEventBronze, "#bronze", athlete_name, (elem) => { 
+                bronze = elem.name.value;
+                return bronze;
+              });
+
+              requestArray(queries.getByNameEventSilver, "#silver", athlete_name, (elem) => { 
+                silver = elem.name.value;
+                return silver;
+              });
+
+              requestArray(queries.getByNameEventGold, "#gold", athlete_name, (elem) => { 
+                gold = elem.name.value;
+                return gold;
+              });
+      
+              requestPodium(queries.getByNamePodium,athlete_name);
+          }
+        }
     </script>
   </body>
 

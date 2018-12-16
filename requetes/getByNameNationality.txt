@@ -1,8 +1,0 @@
-SELECT ?nationality
-WHERE{
-	SELECT ?nationality ?human
-	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human. ?human dbp:nationality ?nationality . ?human rdfs:label ?label} 
-	UNION {?event dbo:silverMedalist ?human . ?human dbp:nationality ?nationality . ?human rdfs:label ?label} 
-	UNION {?event dbo:goldMedalist ?human . ?human dbp:nationality ?nationality . ?human rdfs:label ?label}
-	FILTER regex(?label, %ATHLETE%)
-	FILTER (lang(?label) = 'en')}}

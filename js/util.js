@@ -1,3 +1,4 @@
+
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1),
         sURLVariables = sPageURL.split('&'),
@@ -11,189 +12,167 @@ var getUrlParameter = function getUrlParameter(sParam) {
             return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
         }
     }
-};
-
-function readTextFile(filename, callback) {
-    $.get(filename, function(data) {
-        callback(data);
-    }, 'text');
 }
 
-function request(filename, fieldId, athlete, format) {
-    readTextFile(filename, function(req) {
-        req = req.replace('%ATHLETE%', '"' + athlete + '"');
-        var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
-        $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
-            var first = result = resultatsReq.results.bindings[0];
-            if (first !== undefined && first !== null) {
-                var result = format(first);
-                $(fieldId).html(result);
-            } else {
-                $(fieldId).parent().hide();
-                $(fieldId).text("UNDEFINED");
-            }
-        });
-    });
-}
-
-function requestFromEvent(filename, fieldId, athlete, format) {
-    readTextFile(filename, function(req) {
-        req = req.replace('%ATHLETE%', '"' + athlete + '"');
-        var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
-        $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
-            var first = result = resultatsReq.results.bindings[0];
+function request(req, fieldId, athlete, format) {
+    req = req.replace('%ATHLETE%', '"' + athlete + '"');
+    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
+        var first = result = resultatsReq.results.bindings[0];
+        if (first !== undefined && first !== null) {
             var result = format(first);
             $(fieldId).html(result);
-        });
+        } else {
+            $(fieldId).parent().hide();
+            $(fieldId).text("UNDEFINED");
+        }
     });
 }
 
-function requestArray(filename, fieldId, athlete, format) {
-    readTextFile(filename, function(req) {
-        req = req.replace('%ATHLETE%', '"' + athlete + '"');
-        var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
-        $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
-            var result = [];
-			for(let i=0;i<resultatsReq.results.bindings.length;++i){
-				result.push(format(resultatsReq.results.bindings[i]));
+function requestFromEvent(req, fieldId, athlete, format) {
+    req = req.replace('%ATHLETE%', '"' + athlete + '"');
+    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
+        var first = result = resultatsReq.results.bindings[0];
+        var result = format(first);
+        $(fieldId).html(result);
+    });
+}
+
+function requestArray(req, fieldId, athlete, format) {
+    req = req.replace('%ATHLETE%', '"' + athlete + '"');
+    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
+        var result = [];
+		for(let i=0;i<resultatsReq.results.bindings.length;++i){
+			result.push(format(resultatsReq.results.bindings[i]));
+		}
+		result.sort().reverse();
+        if (result.length>0) {
+        	for(let i=0;i<resultatsReq.results.bindings.length;++i){
+				var event_name = result[i].replace("\'", "£");
+				var e = $('<li onclick=\'requestPodiumByEvent("'+event_name+'");\'></li>');
+				e.html(result[i]);
+        		$(fieldId).append(e);
 			}
-			result.sort().reverse();
-            if (result.length>0) {
-            	for(let i=0;i<resultatsReq.results.bindings.length;++i){
-					var event_name = result[i].replace("\'", "£");
-					//console.log(event_name);
-					var e = $('<li onclick=\'requestPodiumByEvent("'+event_name+'");\' ></li>');
-					e.html(result[i]);
-	        		$(fieldId).append(e);
-				}
-            } else {
-                $(fieldId).parent().hide();
-            }
-        });
+        } else {
+            $(fieldId).parent().hide();
+        }
     });
 }
 
-function requestImageArray(filename, fieldId, athlete, index, format) {
-    readTextFile(filename, function(req) {
-        req = req.replace('%ATHLETE%', '"' + athlete + '"');
-        var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
-        $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
-            var first = resultatsReq.results.bindings[0];
-            var e = "<tr><td><img src=\"https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif\" class=\"img-thumbnail img-fluid\" style=\"width:80px;height:80px;\"/></td><td id=\"label"+index+"\"></td><td id=\"abstract"+index+"\"></td><td id=\"gold"+index+"\"><a id=\"goldRef"+index+"\"></a></td><td id=\"silver"+index+"\"><a id=\"silverRef"+index+"\"></a></td><td id=\"bronze"+index+"\"><a id=\"bronzeRef"+index+"\"></a></td></tr>";
+function requestImageArray(req, fieldId, athlete, index, format) {
+    req = req.replace('%ATHLETE%', '"' + athlete + '"');
+    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
+        var first = resultatsReq.results.bindings[0];
+        var e = "<tr><td><img src=\"https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif\" class=\"img-thumbnail img-fluid\" style=\"width:80px;height:80px;\"/></td><td id=\"label"+index+"\"></td><td id=\"abstract"+index+"\"></td><td id=\"gold"+index+"\"><a id=\"goldRef"+index+"\"></a></td><td id=\"silver"+index+"\"><a id=\"silverRef"+index+"\"></a></td><td id=\"bronze"+index+"\"><a id=\"bronzeRef"+index+"\"></a></td></tr>";
+        var result = format(first);
+        e = e.replace('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',result);
+        e = $(e);
+        $(fieldId).append(e);
+    });
+}
+
+function requestImage(req, fieldId, athlete, format) {
+    req = req.replace('%ATHLETE%', '"' + athlete + '"');
+    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
+        var first = result = resultatsReq.results.bindings[0];
+        if (first !== undefined && first !== null) {
             var result = format(first);
-            e = e.replace('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',result);
-            e = $(e);
-            $(fieldId).append(e);
-        });
-    });
-}
-
-function requestImage(filename, fieldId, athlete, format) {
-    readTextFile(filename, function(req) {
-        req = req.replace('%ATHLETE%', '"' + athlete + '"');
-        var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
-        $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
-            var first = result = resultatsReq.results.bindings[0];
-            if (first !== undefined && first !== null) {
-                var result = format(first);
-                $(fieldId).attr("src", result);
-            }
-        });
+            $(fieldId).attr("src", result);
+        }
     });
 }
 
 function requestPodiumByEvent(name_event){
-	readTextFile("requetes/getByEventPodium.txt", function(req) {
-		tmp = name_event.replace("£","\'");
-        req = req.replace('%EVENT%', '"' + tmp + '"');
-        var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
-        $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
-            var first = result = resultatsReq.results.bindings[0];
-            if (first !== undefined && first !== null) {
-				var event_name = first.name.value;
-				var label_gold = first.labelGold.value;
-                var label_silver = first.labelSilver.value;
-				var label_bronze = first.labelBronze.value;
-				var img_gold;
-				var img_silver;
-				var img_bronze;
-				if (first.imgGold !== undefined && first.imgGold.value !== null) {
-					img_gold = first.imgGold.value;
-				}else{
-					img_gold = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
-				}
-				if (first.imgSilver !== undefined && first.imgSilver.value !== null) {
-					img_silver = first.imgSilver.value;
-				}else{
-					img_silver = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
-				}
-				if (first.imgBronze !== undefined && first.imgBronze !== null) {
-					img_bronze = first.imgBronze.value;
-				}else{
-					img_bronze = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
-				}
-				draw_podium(event_name,label_gold,label_silver,label_bronze,img_gold,img_silver,img_bronze);
-		    } else {
-                $('#container').parent().hide();
-                $('#container').text("UNDEFINED");
+	tmp = name_event.replace("£","\'");
+	req = queries.getByEventPodium;
+    req = req.replace('%ATHLETE%', '"' + tmp + '"');
+    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
+        var first = result = resultatsReq.results.bindings[0];
+        if (first !== undefined && first !== null) {
+			var event_name = first.name.value;
+			var label_gold = first.labelGold.value;
+            var label_silver = first.labelSilver.value;
+			var label_bronze = first.labelBronze.value;
+			var img_gold;
+			var img_silver;
+			var img_bronze;
+			if (first.imgGold !== undefined && first.imgGold.value !== null) {
+				img_gold = first.imgGold.value;
+			}else{
+				img_gold = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
 			}
-		});
-	});	
-}
-
-function requestPodium(filename, athlete){
-	readTextFile(filename, function(req) {
-        req = req.replace('%ATHLETE%', '"' + athlete + '"');
-        var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
-        $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
-            var first = result = resultatsReq.results.bindings[0];
-            if (first !== undefined && first !== null) {
-				var event_name = first.name.value;
-                var label_silver = first.labelSilver.value;
-				var label_bronze = first.labelBronze.value;
-				var img_gold;
-				var img_silver;
-				var img_bronze;
-				if (first.imgGold !== undefined && first.imgGold.value !== null) {
-					img_gold = first.imgGold.value;
-				}else{
-					img_gold = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
-				}
-				if (first.imgSilver !== undefined && first.imgSilver.value !== null) {
-					img_silver = first.imgSilver.value;
-				}else{
-					img_silver = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
-				}
-				if (first.imgBronze !== undefined && first.imgBronze !== null) {
-					img_bronze = first.imgBronze.value;
-				}else{
-					img_bronze = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
-				}
-				draw_podium(event_name,athlete,label_silver,label_bronze,img_gold,img_silver,img_bronze);
-		    } else {
-                $('#container').parent().hide();
-                $('#container').text("UNDEFINED");
+			if (first.imgSilver !== undefined && first.imgSilver.value !== null) {
+				img_silver = first.imgSilver.value;
+			}else{
+				img_silver = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
 			}
-		});
+			if (first.imgBronze !== undefined && first.imgBronze !== null) {
+				img_bronze = first.imgBronze.value;
+			}else{
+				img_bronze = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
+			}
+			draw_podium(event_name,label_gold,label_silver,label_bronze,img_gold,img_silver,img_bronze);
+	    } else {
+            $('#container').parent().hide();
+            $('#container').text("UNDEFINED");
+		}
 	});
 }
 
-function requestSpotlight(filename, fieldId, athlete, format) {
-    readTextFile(filename, function(req) {
-        req = req.replace('%ATHLETE%', '"' + athlete + '"');
-        var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
-        $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
-            var first = result = resultatsReq.results.bindings[0];
-            if (first !== undefined && first !== null) {
-                var result = format(first);
-                spotlight(result, function(newResult) {
-                    $(fieldId).html(newResult);
-                });
-            } else {
-                $(fieldId).parent().hide();
-                $(fieldId).text("UNDEFINED");
-            }
-        });
+function requestPodium(req, athlete){
+    req = req.replace('%ATHLETE%', '"' + athlete + '"');
+    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
+        var first = result = resultatsReq.results.bindings[0];
+        if (first !== undefined && first !== null) {
+			var event_name = first.name.value;
+            var label_silver = first.labelSilver.value;
+			var label_bronze = first.labelBronze.value;
+			var img_gold;
+			var img_silver;
+			var img_bronze;
+			if (first.imgGold !== undefined && first.imgGold.value !== null) {
+				img_gold = first.imgGold.value;
+			}else{
+				img_gold = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
+			}
+			if (first.imgSilver !== undefined && first.imgSilver.value !== null) {
+				img_silver = first.imgSilver.value;
+			}else{
+				img_silver = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
+			}
+			if (first.imgBronze !== undefined && first.imgBronze !== null) {
+				img_bronze = first.imgBronze.value;
+			}else{
+				img_bronze = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
+			}
+			draw_podium(event_name,athlete,label_silver,label_bronze,img_gold,img_silver,img_bronze);
+	    } else {
+            $('#container').parent().hide();
+            $('#container').text("UNDEFINED");
+		}
+	});
+}
+
+function requestSpotlight(req, fieldId, athlete, format) {
+    req = req.replace('%ATHLETE%', '"' + athlete + '"');
+    var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+    $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
+        var first = result = resultatsReq.results.bindings[0];
+        if (first !== undefined && first !== null) {
+            var result = format(first);
+            spotlight(result, function(newResult) {
+                $(fieldId).html(newResult);
+            });
+        } else {
+            $(fieldId).parent().hide();
+            $(fieldId).text("UNDEFINED");
+        }
     });
 }
 
@@ -297,4 +276,35 @@ function spotlight(abstract, callback) {
         var newAbstract = result.substring(index1, index2);
         callback(newAbstract);
     });
+}
+
+
+function getAllMedalistAndEvents(document, athleteList, athleteURL, yearList, yearURL, callback){
+	var query = queries.getAllMedalist;
+	var url = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
+	$.getJSON(url+"&callback=?", function(resultats) {
+	  resultats.results.bindings.forEach(function(element) {
+	    athleteURL.push(element.human.value);
+	    let name = element.name.value;
+	    if(name.includes("("))
+	      name = name.substring(0,name.indexOf("("));
+	    athleteList.push(name);
+	  });
+	  autocomplete(document.getElementById('recherche'), document.getElementById("autocomplete"), athleteList, rechercher);
+	  callback();
+	});
+
+	query = queries.getAllEvents;
+	var url = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
+	var urlGame = "http://dbpedia.org/resource/";
+	$.getJSON(url+"&callback=?", function(resultats) {
+	    resultats.results.bindings.forEach(function(element) {
+	    yearList.push(element.games.value);
+	    yearURL.push(urlGame+element.games.value);
+	  });
+	  var indexToDelete = yearList.indexOf("2016  Summer");
+	  yearList.splice(indexToDelete, 1);
+	  yearURL.splice(indexToDelete, 1);
+	  autocomplete(document.getElementById('rechercheEvent'), document.getElementById("autocompleteEvent"), yearList, rechercherEvent);
+	})
 }

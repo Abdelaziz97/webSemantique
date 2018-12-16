@@ -1,6 +1,0 @@
-SELECT DISTINCT ?image
-WHERE {
-        ?event rdf:type dbo:OlympicEvent.
-        ?event dbo:thumbnail ?image
-        FILTER regex(str(?event),%ATHLETE%)
-}

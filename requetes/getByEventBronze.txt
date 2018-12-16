@@ -1,8 +1,0 @@
-SELECT DISTINCT ?label ?bronze
-WHERE {
-        ?event rdf:type dbo:OlympicEvent.
-        ?event dbo:bronzeMedalist ?bronze.
-        ?bronze rdfs:label ?label
-        FILTER (lang(?label)="en")
-        FILTER regex(str(?event) ,%ATHLETE%)
-}

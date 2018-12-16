@@ -1,9 +1,0 @@
-SELECT ?name
-WHERE{
-	SELECT ?name ?human
-	WHERE {?event rdf:type dbo:OlympicEvent{?event dbo:bronzeMedalist ?human . ?human rdfs:label ?label . ?human <http://purl.org/linguistics/gold/hypernym> ?sport. ?sport rdfs:label ?name } 
-	UNION {?event dbo:silverMedalist ?human . ?human rdfs:label ?label . ?human <http://purl.org/linguistics/gold/hypernym> ?sport . ?sport rdfs:label ?name} 
-	UNION {?event dbo:goldMedalist ?human . ?human rdfs:label ?label . ?human <http://purl.org/linguistics/gold/hypernym> ?sport . ?sport rdfs:label ?name}
-        FILTER regex(?label, %ATHLETE%)
-        FILTER (lang(?label) = 'en')
-	FILTER (lang(?name) = 'en')}}

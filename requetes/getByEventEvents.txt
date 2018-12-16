@@ -1,5 +1,0 @@
-SELECT DISTINCT ?event
-WHERE {
-        ?event rdf:type dbo:OlympicEvent.
-        FILTER regex(?event,%ATHLETE%)
-}
