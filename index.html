@@ -37,7 +37,6 @@
             <input id="rechercheEvent" class="form-control mdb-autocomplete" type="text" placeholder="Event's year" value="" />
         </div>
       </div>
-      </div>
     </div>
 
     <div class="text-center cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
@@ -165,7 +164,7 @@
 
           function famousAthlete(){
             let size = athleteList.length;
-            let random = Math.floor(Math.random() * Math.floor(30));
+            let random = Math.floor(Math.random() * Math.floor(100));
             $("#firstAthlete").html(athleteList[random]);
             var URL = 'athlete.html' + '?athleteURL=' + athleteURL[random];
             var athlete_name = athleteList[random];
@@ -175,9 +174,9 @@
               return pic;
             });
             $("#picRef").attr("href", URL);
-            let random1 = Math.floor(Math.random() * Math.floor(30));
+            let random1 = Math.floor(Math.random() * Math.floor(100));
             while(random1 === random)
-              random1 = Math.floor(Math.random() * Math.floor(30));
+              random1 = Math.floor(Math.random() * Math.floor(100));
             $("#secondAthlete").html(athleteList[random1]);
             var URL = 'athlete.html' + '?athleteURL=' + athleteURL[random1];
             $("#secondAthlete").attr("href", URL);
@@ -187,9 +186,9 @@
               return pic;
             });
             $("#picRef2").attr("href", URL);
-            let random2 = Math.floor(Math.random() * Math.floor(30));
+            let random2 = Math.floor(Math.random() * Math.floor(100));
             while(random2 === random1 || random2 === random)
-              random2 = Math.floor(Math.random() * Math.floor(30));
+              random2 = Math.floor(Math.random() * Math.floor(100));
             $("#thirdAthlete").html(athleteList[random2]);
             var URL = 'athlete.html' + '?athleteURL=' + athleteURL[random2];
             $("#thirdAthlete").attr("href", URL);
