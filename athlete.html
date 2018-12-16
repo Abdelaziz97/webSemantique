@@ -36,7 +36,7 @@
                 <input id="recherche" class="form-control mdb-autocomplete" type="text" placeholder="Search an olympic athlete" value="" />
         </div>
         <div id="autocompleteEvent" class="col autocomplete">
-            <input id="rechercheEvent" class="form-control mdb-autocomplete" type="text" placeholder="Event's year" value="" />
+            <input id="rechercheEvent" class="form-control mdb-autocomplete" type="text" placeholder="Event's year" value=""/>
         </div>
       </div>
     </div>
@@ -184,6 +184,9 @@
                 yearList.push(element.games.value);
                 yearURL.push(urlGame+element.games.value);
               });
+              var indexToDelete = yearList.indexOf("2016  Summer");
+              yearList.splice(indexToDelete, 1);
+              yearURL.splice(indexToDelete, 1);
               autocomplete(document.getElementById('rechercheEvent'), document.getElementById("autocompleteEvent"), yearList, rechercherEvent);
           })
         });
@@ -282,21 +285,21 @@
                     return gold;
                   });
 				  
-				          requestPodium("requetes/getByNamePodium.txt",athlete_name);
+				  requestPodium("requetes/getByNamePodium.txt",athlete_name);
               }
             })
           });
 
 
-          $('#bouton_recherche').click(rechercher);
+        $('#bouton_recherche').click(rechercher);
 
-           $('#container').click(function(event){
-            var athlete = event.target.point.name;
-            var index = athleteList.indexOf(athlete);
-            var URL = athleteURL[index];
-            var newUrl = 'athlete.html' + '?athleteURL=' + URL;
-            window.location = newUrl;
-          });
+        $('#container').click(function(event){
+          var athlete = event.target.point.name;
+          var index = athleteList.indexOf(athlete);
+          var URL = athleteURL[index];
+          var newUrl = 'athlete.html' + '?athleteURL=' + URL;
+          window.location = newUrl;
+        });
 
         function rechercherEvent() {
           var url = window.location.href.split('?')[0];
@@ -305,7 +308,7 @@
           newUrl = 'year.html' + '?yearURL=' + yearURL[yearList.indexOf(value)];
           window.location = newUrl;
         };
-          
+   
         function rechercher() {
             var url = window.location.href.split('?')[0];
             var athlete = $('#recherche').val();

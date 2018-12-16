@@ -133,6 +133,9 @@
                 yearList.push(element.games.value);
                 yearURL.push(urlGame+element.games.value);
               });
+              var indexToDelete = yearList.indexOf("2016  Summer");
+              yearList.splice(indexToDelete, 1);
+              yearURL.splice(indexToDelete, 1);
               autocomplete(document.getElementById('rechercheEvent'), document.getElementById("autocompleteEvent"), yearList, rechercherEvent);
           })
         });
