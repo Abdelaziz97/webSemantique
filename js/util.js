@@ -59,9 +59,28 @@ function requestArray(filename, fieldId, athlete, format) {
     });
 }
 
-function requestImage(filename, fieldId, capital, format) {
+function requestImageArray(filename, fieldId, athleteAndIndex, format) {
     readTextFile(filename, function(req) {
-        req = req.replace('%ATHLETE%', '"' + capital + '"');
+    	var index = athleteAndIndex[athleteAndIndex.length-1];
+    	var athlete = athleteAndIndex.substr(0, athleteAndIndex.length-1);
+        req = req.replace('%ATHLETE%', '"' + athlete + '"');
+        var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
+        $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
+            var first = resultatsReq.results.bindings[0];
+            var e = "<tr><td><img src=\"https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif\" class=\"img-thumbnail img-fluid\" style=\"width:80px;height:80px;\"/></td><td id=\"label"+index+"\"></td></tr>";
+            var result = format(first);	
+            if (first !== undefined && first !== null) {
+            	e = e.replace('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',result);
+            }
+            e = $(e);
+            $(fieldId).append(e);
+        });
+    });
+}
+
+function requestImage(filename, fieldId, athlete, format) {
+    readTextFile(filename, function(req) {
+        req = req.replace('%ATHLETE%', '"' + athlete + '"');
         var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
         $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
             var first = result = resultatsReq.results.bindings[0];
@@ -96,9 +115,9 @@ function requestPodium(filename, athlete){
 	});
 }
 
-function requestSpotlight(filename, fieldId, capital, format) {
+function requestSpotlight(filename, fieldId, athlete, format) {
     readTextFile(filename, function(req) {
-        req = req.replace('%ATHLETE%', '"' + capital + '"');
+        req = req.replace('%ATHLETE%', '"' + athlete + '"');
         var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
         $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
             var first = result = resultatsReq.results.bindings[0];
