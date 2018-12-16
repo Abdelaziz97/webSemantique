@@ -59,18 +59,19 @@ function requestArray(filename, fieldId, athlete, format) {
     });
 }
 
-function requestImageArray(filename, fieldId, athleteAndIndex, format) {
+function requestImageArray(filename, fieldId, athlete, index, format) {
     readTextFile(filename, function(req) {
-    	var index = athleteAndIndex[athleteAndIndex.length-1];
-    	var athlete = athleteAndIndex.substr(0, athleteAndIndex.length-1);
         req = req.replace('%ATHLETE%', '"' + athlete + '"');
         var reqUrl = 'http://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
         $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
             var first = resultatsReq.results.bindings[0];
             var e = "<tr><td><img src=\"https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif\" class=\"img-thumbnail img-fluid\" style=\"width:80px;height:80px;\"/></td><td id=\"label"+index+"\"></td></tr>";
-            var result = format(first);	
             if (first !== undefined && first !== null) {
+            	let result = format(first);
             	e = e.replace('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif',result);
+            }
+            else{
+            	e = e.replace('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif','https://societeenangleterre.com/wp-content/themes/consultix/images/no-image-found-360x260.png');
             }
             e = $(e);
             $(fieldId).append(e);

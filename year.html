@@ -91,18 +91,19 @@
                     eventList.push(element.event.value);
                   });
                   for(let i=0; i<eventList.length; ++i){
-                    let event_name_pic = eventList[i]+i;
-                    let event_name = eventList[i];  
-
-                    requestImageArray("requetes/getByEventImage.txt", "#pic", event_name_pic, (elem) => { 
-                      request("requetes/getByEventLabel.txt", "#label"+i, event_name, (elem) => {
-                        label = elem.label.value;
+                    let event_name = eventList[i];
+                    requestImageArray("requetes/getByEventImage.txt", "#pic", event_name, i, (elem) => {
+                      request("requetes/getByEventLabel.txt", "#label"+i, event_name, (elem2) => {
+                        label = elem2.label.value;
                         return label;
                       });
                       pic = elem.image.value;
+                      if(pic===undefined || pic===null){
+                        console.log("undefined");
+                        return "https://societeenangleterre.com/wp-content/themes/consultix/images/no-image-found-360x260.png";
+                      }
                       return pic;
                     });
-
                   }
                 });                  
               });
