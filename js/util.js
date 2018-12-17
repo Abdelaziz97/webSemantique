@@ -296,7 +296,7 @@ function getAllMedalistAndEvents(document, athleteList, athleteURL, yearList, ye
 
 	query = queries.getAllEvents;
 	var url = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(query) +'&format=json';
-	var urlGame = "http://dbpedia.org/resource/";
+	var urlGame = "https://dbpedia.org/resource/";
 	$.getJSON(url+"&callback=?", function(resultats) {
 	    resultats.results.bindings.forEach(function(element) {
 	    yearList.push(element.games.value);
