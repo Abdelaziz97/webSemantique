@@ -269,22 +269,55 @@ const queries = {
 	'FILTER regex(?year,%ATHLETE%) '+
         'FILTER (lang(?name) = "en")',
 
-    getByNamePodium: 'SELECT ?name ?labelSilver ?labelBronze ?imgGold ?imgSilver ?imgBronze '+
-'WHERE{ '+
-	'SELECT ?name ?human ?labelSilver ?labelBronze ?imgGold ?imgSilver ?imgBronze '+
-	'WHERE {?event rdf:type dbo:OlympicEvent{?event rdfs:label ?name .  '+
-                                                '?event dbo:goldMedalist ?human .  '+
-                                                '?human dbo:thumbnail ?imgGold. '+
-                                                '?human rdfs:label ?label. '+
-                                                '?event dbo:silverMedalist ?silver . '+
-                                                '?silver rdfs:label ?labelSilver. '+
+    getByNamePodium: 'SELECT ?name ?labelGold ?labelSilver ?labelBronze ?imgGold ?imgSilver '+ 
+'?imgBronze '+
+'WHERE{ '+ 
+	'SELECT ?name ?human ?labelGold ?labelSilver ?labelBronze ?imgGold ?imgSilver ?imgBronze '+
+	'WHERE {{?event rdf:type dbo:OlympicEvent{?event rdfs:label ?name . '+  
+                                                '?event dbo:goldMedalist ?human . '+  
+                                                'OPTIONAL {?human dbo:thumbnail ?imgGold.} '+ 
+                                                '?human rdfs:label ?labelGold. '+
+                                                '?event dbo:silverMedalist ?silver . '+ 
+                                                '?silver rdfs:label ?labelSilver. '+ 
                                                 '?silver dbo:thumbnail ?imgSilver. '+
-                                                '?event dbo:bronzeMedalist ?bronze . '+
-                                                '?bronze rdfs:label ?labelBronze.  '+
+                                                '?event dbo:bronzeMedalist ?bronze . '+ 
+                                                '?bronze rdfs:label ?labelBronze. '+  
                                                 '?bronze dbo:thumbnail ?imgBronze.} '+
-	'FILTER regex(?label,  %ATHLETE%) '+
-	'FILTER (lang(?label)="en") '+
-        'FILTER (lang(?labelSilver)="en") '+
+	'FILTER regex(str(?labelGold),  %ATHLETE%) '+
+        'FILTER (lang(?labelGold)="en") '+ 
+        'FILTER (lang(?labelSilver)="en") '+ 
+        'FILTER (lang(?labelBronze)="en") '+ 
+        'FILTER (lang(?name)="en")} '+
+        'UNION '+
+        '{?event rdf:type dbo:OlympicEvent{?event rdfs:label ?name . '+  
+                                                '?event dbo:goldMedalist ?human . '+  
+                                                'OPTIONAL {?human dbo:thumbnail ?imgGold.} '+ 
+                                                '?human rdfs:label ?labelGold. '+
+                                                '?event dbo:silverMedalist ?silver . '+ 
+                                                '?silver rdfs:label ?labelSilver. '+ 
+                                                'OPTIONAL {?silver dbo:thumbnail ?imgSilver.} '+
+                                                '?event dbo:bronzeMedalist ?bronze . '+ 
+                                                '?bronze rdfs:label ?labelBronze. '+  
+                                                'OPTIONAL{?bronze dbo:thumbnail ?imgBronze.}} '+
+	'FILTER regex(str(?labelSilver),  %ATHLETE%) '+
+        'FILTER (lang(?labelGold)="en") '+ 
+        'FILTER (lang(?labelSilver)="en") '+ 
+        'FILTER (lang(?labelBronze)="en") '+ 
+        'FILTER (lang(?name)="en")} '+
+        'UNION '+
+        '{?event rdf:type dbo:OlympicEvent{?event rdfs:label ?name . '+  
+                                                '?event dbo:goldMedalist ?human . '+  
+                                                'OPTIONAL {?human dbo:thumbnail ?imgGold.} '+ 
+                                                '?human rdfs:label ?labelGold. '+
+                                                '?event dbo:silverMedalist ?silver . '+ 
+                                                '?silver rdfs:label ?labelSilver. '+ 
+                                                'OPTIONAL{?silver dbo:thumbnail ?imgSilver.} '+
+                                                '?event dbo:bronzeMedalist ?bronze . '+ 
+                                                '?bronze rdfs:label ?labelBronze. '+  
+                                                'OPTIONAL{?bronze dbo:thumbnail ?imgBronze.}} '+
+	'FILTER regex(str(?labelBronze),  %ATHLETE%) '+
+        'FILTER (lang(?labelGold)="en") '+
+        'FILTER (lang(?labelSilver)="en") '+ 
         'FILTER (lang(?labelBronze)="en") '+
-        'FILTER (lang(?name)="en")}}'  
+        'FILTER (lang(?name)="en")}}}'
 };

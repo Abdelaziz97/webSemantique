@@ -125,12 +125,14 @@ function requestPodiumByEvent(name_event){
 }
 
 function requestPodium(req, athlete){
-    req = req.replace('%ATHLETE%', '"' + athlete + '"');
+    req = req.split('%ATHLETE%').join('"' + athlete + '"');
+    console.log(athlete);
     var reqUrl = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query='+ encodeURIComponent(req) +'&format=json';
     $.getJSON(reqUrl+"&callback=?", function(resultatsReq) {
         var first = result = resultatsReq.results.bindings[0];
         if (first !== undefined && first !== null) {
 			var event_name = first.name.value;
+            var label_gold = first.labelGold.value;
             var label_silver = first.labelSilver.value;
 			var label_bronze = first.labelBronze.value;
 			var img_gold;
@@ -151,7 +153,7 @@ function requestPodium(req, athlete){
 			}else{
 				img_bronze = "https://st3.depositphotos.com/5266903/13965/v/1600/depositphotos_139656228-stock-illustration-3rd-prizer-sportsman-flat-vector.jpg";
 			}
-			draw_podium(event_name,athlete,label_silver,label_bronze,img_gold,img_silver,img_bronze);
+			draw_podium(event_name,label_gold,label_silver,label_bronze,img_gold,img_silver,img_bronze);
 	    } else {
             $('#container').parent().hide();
             $('#container').text("UNDEFINED");
